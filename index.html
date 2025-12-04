@@ -50,6 +50,7 @@ body {
 
 .container {
   max-width: 1000px;
+  width: 95%; /* Add this line */
   margin: 0 auto;
   background: rgba(255, 255, 255, 0.97);
   border: 3px solid var(--primary);
@@ -67,6 +68,9 @@ body {
 /* Block-based navigation */
 .content-section {
   display: none;
+  overflow: auto; /* Add this line */
+  width: 100%; /* Add this line */
+  box-sizing: border-box; /* Add this line */
 }
 
 .content-section.active {
@@ -308,6 +312,13 @@ p {
   line-height: 1.8;
   margin-bottom: 1.2em;
   font-size: 1.1rem;
+}
+
+/* Add these lines */
+p, li, .quiz-option, a, h3, h4 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 /* Video tutorials */
@@ -1011,6 +1022,26 @@ p {
   color: #721c24;
   border: 1px solid #f5c6cb;
   display: block;
+}
+
+/* Add these styles at the end of your CSS */
+.techniques-section, .task-section, .quiz-content {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Fix for Padlet submission boxes */
+[style*="background: var(--techniques-light)"],
+[style*="background: var(--task-light)"] {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Fix for links that might overflow */
+a {
+  word-break: break-all;
 }
 
 @media (max-width: 768px) {

@@ -27,6 +27,8 @@
   --techniques-light: #f5ffff;
   --task-banner: #ffebf5;
   --techniques-banner: #e6ffff;
+  --documentation: #8a2be2;
+  --documentation-light: #f5f0ff;
 }
 
 * {
@@ -1128,6 +1130,10 @@ a {
         <h4 style="margin-top: 0; color: var(--techniques);">TASK 2</h4>
         <p style="margin-bottom: 0;">Research page with digital techniques</p>
       </div>
+      <div style="flex: 1; min-width: 250px; background: var(--documentation-light); padding: 15px; border-radius: 8px; border-left: 5px solid var(--documentation);">
+        <h4 style="margin-top: 0; color: var(--documentation);">TASK 3</h4>
+        <p style="margin-bottom: 0;">Document your progress</p>
+      </div>
     </div>
   </div>
 
@@ -1148,6 +1154,10 @@ a {
     <div class="nav-block nav-techniques" data-section="techniques">
       <h3>Task 2</h3>
       <p>Research Page</p>
+    </div>
+    <div class="nav-block nav-task" data-section="documentation" style="border-color: var(--documentation); background-color: var(--documentation-light);">
+      <h3 style="color: var(--documentation);">Task 3</h3>
+      <p>Document Progress</p>
     </div>
     <div class="nav-block nav-quiz" data-section="quiz">
       <h3>Knowledge Check</h3>
@@ -1189,7 +1199,7 @@ a {
     <h2>Task Requirements</h2>
     
     <div class="important-notice">
-      <strong>Two Tasks:</strong> Learn digital techniques and create a research page.
+      <strong>Three Tasks:</strong> Learn digital techniques, create a research page, and document your progress.
     </div>
     
     <div class="technique-grid">
@@ -1214,6 +1224,18 @@ a {
             <li>Include enlarged details</li>
             <li>Cite sources correctly</li>
             <li>Connect visual elements</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="technique-card">
+        <div class="technique-header">Task 3: Documentation</div>
+        <div class="technique-content">
+          <ul>
+            <li>Record your process</li>
+            <li>Reflect on your learning</li>
+            <li>Capture different stages</li>
+            <li>Share challenges and solutions</li>
           </ul>
         </div>
       </div>
@@ -1622,12 +1644,27 @@ a {
 
       <div class="nav-buttons">
         <button class="nav-btn prev-btn" onclick="goToSection('task')">Previous: Task 1</button>
+        <button class="nav-btn next-btn" onclick="goToSection('documentation')">Next: Task 3</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- DOCUMENTATION SECTION -->
+  <div id="documentation" class="content-section">
+    <div class="section-banner task-banner" style="background-color: var(--documentation-light); border-color: var(--documentation); color: var(--documentation);">
+      TASK 3: DOCUMENT YOUR PROGRESS
+    </div>
+    
+    <div class="task-section">
+      <iframe src="https://hsstokes.github.io/Progress_Documentation/" width="100%" height="800px" frameborder="0"></iframe>
+      
+      <div class="nav-buttons">
+        <button class="nav-btn prev-btn" onclick="goToSection('techniques')">Previous: Task 2</button>
         <button class="nav-btn next-btn" onclick="goToSection('quiz')">Next: Knowledge Check</button>
       </div>
     </div>
   </div>
      
-  
   <!-- QUIZ SECTION -->
   <div id="quiz" class="content-section">
     <div class="section-banner quiz-banner">
@@ -1704,7 +1741,7 @@ a {
     </div>
     
     <div class="nav-buttons">
-      <button class="nav-btn prev-btn" onclick="goToSection('techniques')">Previous: Task 2</button>
+      <button class="nav-btn prev-btn" onclick="goToSection('documentation')">Previous: Task 3</button>
       <button class="nav-btn next-btn" onclick="goToSection('overview')">Back to Overview</button>
     </div>
   </div>
@@ -1726,7 +1763,7 @@ function openModal(src) {
 }
 
 // Section Navigation
-const sections = ['overview', 'task', 'techniques', 'quiz'];
+const sections = ['overview', 'task', 'techniques', 'documentation', 'quiz'];
 let currentSection = 'overview';
 
 function goToSection(sectionId) {

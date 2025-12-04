@@ -1024,6 +1024,54 @@ p, li, .quiz-option, a, h3, h4 {
   display: block;
 }
 
+/* Add these additional fixes */
+
+/* Fix for quiz options that are overflowing */
+.quiz-option {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 15px;
+}
+
+/* Fix for Padlet upload instructions */
+[id^="upload-to-padlet"] ol,
+[id^="upload-to-padlet"] li,
+.upload-to-padlet ol,
+.upload-to-padlet li {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 15px;
+}
+
+/* Ensure all text containers have proper wrapping */
+.quiz-question,
+.reflection-questions p,
+.reflection-questions li,
+.design-tips li,
+.detail-selection li,
+.visual-connections li,
+.visual-hierarchy li,
+.how-to-submit li {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix for long URLs and text */
+a, pre, code {
+  word-break: break-all;
+  max-width: 100%;
+  display: inline-block;
+}
+
 /* Add these styles at the end of your CSS */
 .techniques-section, .task-section, .quiz-content {
   width: 100%;

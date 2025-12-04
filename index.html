@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Expanding details and artists link within Research Pages</title>
+<style>
+:root {
+  --primary: #ea37a3;
+  --primary-light: #fdf1f5;
+  --secondary: #0a8080;
+  --secondary-light: #f5ffff;
+  --dark: #222;
+  --light: #fff;
+  --grid-light: #e0e0e0;
+  --homework: #ea37a3;
+  --homework-light: #fdf1f5;
+  --inclass: #0a8080;
+  --inclass-light: #f5ffff;
+  --homework-banner: #ffebf5;
+  --inclass-banner: #e6ffff;
+  --quiz: #4682b4;
+  --quiz-light: #f0f8ff;
+  --task: #ea37a3;
+  --task-light: #fdf1f5;
+  --techniques: #0a8080;
+  --techniques-light: #f5ffff;
+  --task-banner: #ffebf5;
+  --techniques-banner: #e6ffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Typewriter Condensed", "Courier New", monospace;
+  background-image:
+    linear-gradient(var(--grid-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-light) 1px, transparent 1px);
+  background-size: 20px 20px, 20px 20px;
+  background-attachment: fixed;
+  color: var(--dark);
+  padding: 20px;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.97);
+  border: 3px solid var(--primary);
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+
+/* Block-based navigation */
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.main-navigation {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.nav-block {
+  background: #f8f8f8;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-block:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.nav-block h3 {
+  font-size: 1.2rem;
+  margin: 0 0 8px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.nav-block p {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+  position: relative;
+  z-index: 2;
+}
+
+.nav-block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.nav-overview {
+  border-color: var(--secondary);
+  background-color: var(--secondary-light);
+}
+
+.nav-overview h3 {
+  color: var(--secondary);
+}
+
+.nav-overview::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z" fill="%230a8080"/></svg>');
+}
+
+.nav-task {
+  border-color: var(--task);
+  background-color: var(--task-light);
+}
+
+.nav-task h3 {
+  color: var(--task);
+}
+
+.nav-task::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z" fill="%23ea37a3"/></svg>');
+}
+
+.nav-techniques {
+  border-color: var(--techniques);
+  background-color: var(--techniques-light);
+}
+
+.nav-techniques h3 {
+  color: var(--techniques);
+}
+
+.nav-techniques::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M184 48H328c4.4 0 8 3.6 8 8V96H176V56c0-4.4 3.6-8 8-8zm-56 8V96H64C28.7 96 0 124.7 0 160v96H192 320 512V160c0-35.3-28.7-64-64-64H384V56c0-30.9-25.1-56-56-56H184c-30.9 0-56 25.1-56 56zM512 288H320v32c0 17.7-14.3 32-32 32H224c-17.7 0-32-14.3-32-32V288H0V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V288z" fill="%230a8080"/></svg>');
+}
+
+.nav-quiz {
+  border-color: var(--quiz);
+  background-color: var(--quiz-light);
+}
+
+.nav-quiz h3 {
+  color: var(--quiz);
+}
+
+.nav-quiz::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM288 352a32 32 0 1 1 -64 0 32 32 0 1 1 64 0z" fill="%234682b4"/></svg>');
+}
+
+.active-block {
+  background-color: var(--secondary);
+  color: white;
+  box-shadow: 0 8px 20px rgba(10, 128, 128, 0.3);
+  transform: translateY(-5px);
+}
+
+.active-block h3, .active-block p {
+  color: white;
+}
+
+.active-block::before {
+  opacity: 0.2;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0 20px;
+}
+
+.nav-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.prev-btn {
+  background-color: #f2f2f2;
+  color: #555;
+}
+
+.prev-btn::before {
+  content: "←";
+}
+
+.next-btn {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.next-btn::after {
+  content: "→";
+}
+
+.progress-bar-container {
+  height: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--secondary);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: "Typewriter Condensed", "Courier New", monospace;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.8em;
+}
+
+h1 {
+  color: var(--primary);
+  font-size: 2.5rem;
+  border-bottom: 2px solid var(--secondary);
+  padding-bottom: 15px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+h2 {
+  color: var(--secondary);
+  font-size: 1.6rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+h2::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 25px;
+  background: var(--primary);
+  margin-right: 15px;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+p {
+  line-height: 1.8;
+  margin-bottom: 1.2em;
+  font-size: 1.1rem;
+}
+
+/* Video tutorials */
+.video-tutorial {
+  margin: 30px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border: 2px solid var(--secondary);
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-caption {
+  background: var(--secondary);
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* Workflow box */
+.workflow-box {
+  background: #f8f8f8;
+  margin: 35px 0;
+  border-radius: 15px;
+  border: 3px solid var(--secondary);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.workflow-header {
+  background: var(--secondary);
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+}
+
+.workflow-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.workflow-steps {
+  padding: 20px 25px;
+}
+
+.step {
+  position: relative;
+  padding: 20px 20px 20px 50px;
+  background: white;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.step-number {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.step-title {
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.step-content ul, .step-content ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.step-content li {
+  margin-bottom: 8px;
+}
+
+.step-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  max-height: 300px;
+  border-radius: 8px;
+  margin: 15px auto;
+  display: block;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border: 2px solid #eee;
+  object-fit: contain;
+}
+
+.step-image:hover {
+  transform: scale(1.03);
+  border-color: var(--secondary);
+}
+
+/* Term explanation box */
+.term-box {
+  background: #f8f9fa;
+  border-left: 6px solid #17a2b8;
+  padding: 15px 20px;
+  margin: 20px 0;
+  font-size: 1rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  border-radius: 0 8px 8px 0;
+}
+
+.term-box strong {
+  color: #17a2b8;
+}
+
+.term-box ul {
+  margin-left: 25px;
+  margin-top: 10px;
+}
+
+.term-box li {
+  margin-bottom: 8px;
+}
+
+/* Important notice */
+.important-notice {
+  margin-bottom: 20px; 
+  padding: 15px 20px; 
+  background: rgba(234, 55, 163, 0.15); 
+  border-left: 5px solid var(--primary); 
+  border-radius: 8px;
+  font-size: 1.1rem;
+}
+
+.important-notice strong {
+  color: var(--primary);
+}
+
+/* Shortcut */
+.shortcut {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #f2f2f2;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 1em;
+  margin: 0 2px;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+
+/* Example section */
+.example-section {
+  background: #f8f8f8; 
+  padding: 30px; 
+  border-radius: 15px; 
+  margin: 30px 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.example-title {
+  color: var(--secondary); 
+  margin-top: 0;
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+}
+
+.example-image-container {
+  text-align: center; 
+  margin-bottom: 25px;
+}
+
+.example-image {
+  width: 90%; 
+  max-width: 700px; 
+  border: 3px solid #ddd; 
+  border-radius: 10px; 
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  object-fit: contain;
+  max-height: 500px;
+}
+
+.example-image:hover {
+  transform: scale(1.02);
+  border-color: var(--secondary);
+}
+
+/* Artist gallery */
+.artist-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin: 25px 0;
+}
+
+.artist-item {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 2px solid #eee;
+}
+
+.artist-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  border-color: var(--secondary);
+}
+
+.artist-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+.artist-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 10px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Workshop Overview Styling */
+.workshop-overview {
+  margin: 35px 0;
+  border-radius: 15px;
+  border: 3px solid var(--secondary);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.workshop-header {
+  background: var(--secondary);
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+}
+
+.workshop-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: white;
+}
+
+.workshop-title {
+  padding: 20px 25px 10px 25px;
+}
+
+.workshop-title h3 {
+  color: var(--secondary);
+  text-align: center;
+  font-size: 1.6rem;
+  margin: 0 0 20px 0;
+  border-bottom: 2px dashed var(--secondary);
+  padding-bottom: 15px;
+}
+
+.workshop-content {
+  padding: 0 25px 25px 25px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.workshop-image {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  border: 3px solid white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.workshop-image:hover {
+  transform: scale(1.03);
+}
+
+.workshop-learning-points {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.learning-points-title {
+  color: var(--primary);
+  margin-top: 0;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  border-left: 5px solid var(--primary);
+  padding-left: 15px;
+}
+
+.learning-points-list {
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+.learning-points-item {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.learning-points-item::before {
+  content: "•";
+  color: var(--primary);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.workshop-example-note {
+  background: rgba(234, 55, 163, 0.1);
+  padding: 10px 15px;
+  border-radius: 5px;
+  border-left: 4px solid var(--primary);
+  font-size: 0.95em;
+  font-style: italic;
+  margin-top: 15px;
+}
+
+/* Technique grid */
+.technique-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 25px 0;
+}
+
+.technique-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  border: 2px solid var(--secondary-light);
+}
+
+.technique-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--secondary);
+}
+
+.technique-header {
+  background: var(--secondary-light);
+  padding: 15px 20px;
+  color: var(--secondary);
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #eee;
+}
+
+.technique-content {
+  padding: 20px;
+}
+
+.technique-content ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.technique-content li {
+  margin-bottom: 10px;
+}
+
+.technique-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  margin: 15px 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  border: 2px solid #eee;
+  transition: transform 0.3s ease;
+  object-fit: contain;
+}
+
+.technique-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  border-color: var(--secondary);
+}
+
+/* Prep box */
+.prep-box {
+  border: 3px dashed var(--primary);
+  border-radius: 12px;
+  padding: 25px;
+  margin: 30px 0;
+  background-color: var(--primary-light);
+  position: relative;
+}
+
+.prep-box h3 {
+  color: var(--primary);
+  margin-top: 0;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Class activity */
+.class-activity {
+  margin-top: 40px; 
+  border: 3px solid var(--primary); 
+  border-radius: 15px; 
+  padding: 30px; 
+  background-color: var(--primary-light);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.class-activity h3 {
+  color: var(--primary); 
+  margin-top: 0;
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+}
+
+/* Activity grid */
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.activity-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.activity-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.activity-box h4 {
+  margin-top: 0; 
+  color: var(--secondary);
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+/* Modal for image viewing */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.85);
+  overflow: auto;
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid white;
+  border-radius: 5px;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  z-index: 1001;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* NEW STYLES FOR TASK/TECHNIQUES DISTINCTION */
+.section-banner {
+  margin: 25px 0;
+  padding: 15px 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100%;
+}
+
+.task-banner {
+  background-color: var(--task-banner);
+  border: 2px solid var(--task);
+  color: var(--task);
+}
+
+.task-banner::before {
+  background-color: var(--task);
+}
+
+.techniques-banner {
+  background-color: var(--techniques-banner);
+  border: 2px solid var(--techniques);
+  color: var(--techniques);
+}
+
+.techniques-banner::before {
+  background-color: var(--techniques);
+}
+
+.quiz-banner {
+  background-color: var(--quiz-light);
+  border: 2px solid var(--quiz);
+  color: var(--quiz);
+}
+
+.quiz-banner::before {
+  background-color: var(--quiz);
+}
+
+.task-section h2, 
+.task-section h3 {
+  color: var(--task);
+}
+
+.task-section h2::before {
+  background: var(--task);
+}
+
+.techniques-section h2, 
+.techniques-section h3 {
+  color: var(--techniques);
+}
+
+.techniques-section h2::before {
+  background: var(--techniques);
+}
+
+.task-label, .techniques-label {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-left: 15px;
+  vertical-align: middle;
+}
+
+.task-label {
+  background-color: var(--task);
+  color: white;
+}
+
+.techniques-label {
+  background-color: var(--techniques);
+  color: white;
+}
+
+/* QUIZ STYLES */
+.quiz-container {
+  background-color: white;
+  margin: 30px auto;
+  padding: 0;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  overflow: hidden;
+  border: 3px solid var(--quiz);
+}
+
+.quiz-header {
+  background-color: var(--quiz);
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.quiz-header h3 {
+  margin: 0;
+  color: white;
+}
+
+.quiz-content {
+  padding: 20px;
+}
+
+.quiz-question {
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--quiz);
+}
+
+.quiz-options {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.quiz-option {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quiz-option:hover {
+  background-color: var(--quiz-light);
+  border-color: var(--quiz);
+}
+
+.quiz-option.selected {
+  background-color: var(--quiz);
+  color: white;
+}
+
+.quiz-feedback {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  display: none;
+}
+
+.quiz-feedback.correct {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  display: block;
+}
+
+.quiz-feedback.incorrect {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .workshop-content {
+    grid-template-columns: 1fr;
+  }
+  .workflow-steps {
+    padding: 15px;
+  }
+  .step {
+    padding: 15px 15px 15px 40px;
+  }
+  .step-number {
+    width: 32px;
+    height: 32px;
+    left: -5px;
+    font-size: 1rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Expanding details and artists link within Research Pages</h1>
+
+  <!-- Workshop Structure Overview - Clear distinction between tasks and techniques -->
+  <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed #666;">
+    <h3 style="text-align: center; margin-top: 0; color: #333;">Large in Details: Research Page Development</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 15px;">
+      <div style="flex: 1; min-width: 250px; background: var(--task-banner); padding: 15px; border-radius: 8px; border-left: 5px solid var(--task);">
+        <h4 style="margin-top: 0; color: var(--task);">TASK 1</h4>
+        <p style="margin-bottom: 0;">Evidence of understanding digital techniques</p>
+      </div>
+      <div style="flex: 1; min-width: 250px; background: var(--techniques-banner); padding: 15px; border-radius: 8px; border-left: 5px solid var(--techniques);">
+        <h4 style="margin-top: 0; color: var(--techniques);">TASK 2</h4>
+        <p style="margin-bottom: 0;">Evidence of a refined research page, including digital techniques</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Block-based navigation -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="main-navigation">
+    <div class="nav-block nav-overview" data-section="overview">
+      <h3>Overview</h3>
+      <p>Task Requirements & Objectives</p>
+    </div>
+    <div class="nav-block nav-task" data-section="task">
+      <h3>Task 1</h3>
+      <p>Digital Techniques Exploration</p>
+    </div>
+    <div class="nav-block nav-techniques" data-section="techniques">
+      <h3>Task 2</h3>
+      <p>Research Page Refinement</p>
+    </div>
+    <div class="nav-block nav-quiz" data-section="quiz">
+      <h3>Knowledge Check</h3>
+      <p>Test Your Understanding</p>
+    </div>
+  </div>
+  
+  <!-- OVERVIEW SECTION -->
+  <div id="overview" class="content-section active">
+    <div class="workshop-overview">
+      <div class="workshop-header">
+        <h3>Large in Details: Research Page Development</h3>
+      </div>
+      
+      <div class="workshop-title">
+        <h3>Creating Effective Artist Research Pages with Detailed Focus</h3>
+      </div>
+      
+      <div class="workshop-content">
+        <div>
+          <img src="research_page_example.jpg" alt="Research page example showing artwork with enlarged details and proper citation" class="workshop-image" onclick="openModal(this.src)">
+          <p style="text-align: center; font-style: italic; margin-top: 12px;">Example of a well-designed research page with enlarged details and proper citation</p>
+        </div>
+        
+        <div class="workshop-learning-points">
+          <h4 class="learning-points-title">What You'll Learn:</h4>
+          <ul class="learning-points-list">
+            <li class="learning-points-item">Selecting and highlighting important details</li>
+            <li class="learning-points-item">Applying digital enhancement techniques</li>
+            <li class="learning-points-item">Using noise filters for texture</li>
+            <li class="learning-points-item">Adding color effects and overlays</li>
+            <li class="learning-points-item">Creating visual connections in research</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Requirements -->
+    <h2>Task Requirements</h2>
+    
+    <div class="important-notice">
+      <strong>Two-Part Task:</strong> Develop your understanding of digital techniques and apply them to create a refined research page.
+    </div>
+    
+    <div class="technique-grid">
+      <div class="technique-card">
+        <div class="technique-header">Task 1: Digital Techniques</div>
+        <div class="technique-content">
+          <ul>
+            <li>Demonstrate understanding of enlarging details</li>
+            <li>Show proficiency in using noise filters</li>
+            <li>Apply color effects to enhance images</li>
+            <li>Document your learning process</li>
+            <li>Create samples showing technique application</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="technique-card">
+        <div class="technique-header">Task 2: Research Page</div>
+        <div class="technique-content">
+          <ul>
+            <li>Create a refined research page about an artist</li>
+            <li>Apply digital techniques from Task 1</li>
+            <li>Include enlarged details that highlight important elements</li>
+            <li>Use proper referencing and citation</li>
+            <li>Create visual connections between research elements</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Assessment Criteria -->
+    <h2>Assessment Criteria</h2>
+    
+    <p>Your work will be evaluated on:</p>
+    
+    <div class="activity-grid">
+      <div class="activity-box">
+        <h4>Technical Proficiency</h4>
+        <ul>
+          <li>Correct application of digital techniques</li>
+          <li>Skill in enlarging and highlighting details</li>
+          <li>Effective use of color effects and filters</li>
+        </ul>
+      </div>
+      
+      <div class="activity-box">
+        <h4>Research Quality</h4>
+        <ul>
+          <li>Depth of artist investigation</li>
+          <li>Visual analysis of artwork</li>
+          <li>Proper citations and references</li>
+        </ul>
+      </div>
+      
+      <div class="activity-box">
+        <h4>Visual Communication</h4>
+        <ul>
+          <li>Layout and composition</li>
+          <li>Visual hierarchy and focus</li>
+          <li>Purposeful design choices</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn prev-btn" onclick="goToSection(null)" disabled>Previous</button>
+      <button class="nav-btn next-btn" onclick="goToSection('task')">Next: Task 1</button>
+    </div>
+  </div>
+
+  <!-- TASK SECTION: Task 1 - Digital Techniques -->
+  <div id="task" class="content-section">
+    <div class="section-banner task-banner">
+      TASK 1: DIGITAL TECHNIQUES - Evidence of Understanding
+    </div>
+    
+    <div class="task-section">
+      <!-- Video Tutorial -->
+      <div class="video-tutorial">
+        <div class="video-wrapper">
+          <iframe width="560" height="315" src="https://ual.cloud.panopto.eu/Panopto/Pages/Embed.aspx?id=2a3b5c8c-30ff-4bd7-ada8-b27b00980c43" title="Digital Techniques Tutorial - Enlarging details and enhancing images" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-caption">
+          Watch tutorial on enlarging details and enhancing images
+        </div>
+      </div>
+      
+      <h2>Digital Enhancement Techniques <span class="task-label">Exploration</span></h2>
+      
+      <div class="workflow-box">
+        <div class="workflow-header">
+          <h3>Key Digital Techniques</h3>
+        </div>
+        <div class="workflow-steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-title">Enlarging Important Details</div>
+            <div class="step-content">
+              <p>Learn how to select, isolate and enlarge specific details from artwork:</p>
+              <ul>
+                <li>Use Selection tools (Marquee, Lasso, Object Selection)</li>
+                <li>Copy and paste selections to new layers</li>
+                <li>Resize and position details for emphasis</li>
+              </ul>
+              <img class="step-image" src="technique_enlarging.jpg" alt="Example of enlarging details technique" onclick="openModal(this.src)">
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-title">Adding Noise Filter Effects</div>
+            <div class="step-content">
+              <p>Add texture and depth to your images using noise filters:</p>
+              <ul>
+                <li>Apply Filter > Noise > Add Noise</li>
+                <li>Experiment with different amounts (5-15%)</li>
+                <li>Try both Uniform and Gaussian distributions</li>
+                <li>Use Monochromatic option for best results</li>
+              </ul>
+              <img class="step-image" src="technique_noise.jpg" alt="Example of noise filter application" onclick="openModal(this.src)">
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-title">Color Effects and Blending Modes</div>
+            <div class="step-content">
+              <p>Enhance visual interest with color overlays and blending modes:</p>
+              <ul>
+                <li>Create new layers filled with color</li>
+                <li>Experiment with blending modes (Multiply, Overlay, Screen)</li>
+                <li>Adjust opacity for subtle effects</li>
+                <li>Use color to create visual connections</li>
+              </ul>
+              <img class="step-image" src="technique_color.jpg" alt="Example of color effects and blending modes" onclick="openModal(this.src)">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Technique Practice -->
+      <h2>Practice Exercise <span class="task-label">Hands-On</span></h2>
+      
+      <div class="class-activity">
+        <h3>Digital Technique Exploration</h3>
+        
+        <div class="activity-grid">
+          <div class="activity-box">
+            <h4>1. Select Your Image</h4>
+            <ul>
+              <li>Choose an artwork image to practice with</li>
+              <li>Identify 2-3 important details worth highlighting</li>
+              <li>Consider what makes these details significant</li>
+            </ul>
+          </div>
+          
+          <div class="activity-box">
+            <h4>2. Apply Techniques</h4>
+            <ul>
+              <li>Isolate and enlarge your chosen details</li>
+              <li>Apply noise filter to add texture</li>
+              <li>Experiment with color effects</li>
+              <li>Try different blending modes</li>
+            </ul>
+          </div>
+          
+          <div class="activity-box">
+            <h4>3. Document Your Process</h4>
+            <ul>
+              <li>Save before/after examples</li>
+              <li>Note which settings worked best</li>
+              <li>Record any challenges and solutions</li>
+              <li>Prepare to apply these in Task 2</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Examples of techniques -->
+      <h2>Technique Examples <span class="task-label">Reference</span></h2>
+      
+      <div class="technique-grid">
+        <div class="technique-card">
+          <div class="technique-header">Enlarging Details</div>
+          <div class="technique-content">
+            <img class="technique-image" src="example_enlarging.jpg" alt="Example of successful detail enlargement in research" onclick="openModal(this.src)">
+            <p>This example shows effective selection and enlargement of textile details, creating visual focus on important elements.</p>
+          </div>
+        </div>
+        
+        <div class="technique-card">
+          <div class="technique-header">Noise Filter Application</div>
+          <div class="technique-content">
+            <img class="technique-image" src="example_noise.jpg" alt="Example of noise filter enhancing texture in artwork" onclick="openModal(this.src)">
+            <p>Notice how the noise filter enhances the textural quality of the artwork, adding depth and visual interest.</p>
+          </div>
+        </div>
+        
+        <div class="technique-card">
+          <div class="technique-header">Color Effects</div>
+          <div class="technique-content">
+            <img class="technique-image" src="example_color.jpg" alt="Example of color effects creating connections" onclick="openModal(this.src)">
+            <p>Color overlays create visual connections between different elements while enhancing the emotional impact.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Deliverables - UPDATED SUBMISSION SECTION -->
+      <h2>What to Submit <span class="task-label">Submit</span></h2>
+      
+      <div style="background: var(--task-light); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 30px 0; border: 3px dashed var(--task);">
+        <h3 style="color: var(--task); text-align: center; margin-top: 0; margin-bottom: 15px;">Upload to Padlet</h3>
+        
+        <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px;">
+          <p style="margin-bottom: 5px;">Share one example showing your digital techniques.</p>
+          <p style="margin-bottom: 0;">Name: <strong>LASTNAME_task1.jpg</strong></p>
+        </div>
+        
+        <!-- Padlet embed -->
+        <iframe style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 8px;" width="100%" height="400" src="https://artslondon.padlet.org/hstokes12/week-6-noise-filters-colour-effects-and-enlarging-details-nouw07zqdt1iawdx" frameborder="0" allow="camera;microphone;geolocation"></iframe>
+    </div>
+    
+    <div class="nav-buttons">
+      <button class="nav-btn prev-btn" onclick="goToSection('overview')">Previous: Overview</button>
+      <button class="nav-btn next-btn" onclick="goToSection('techniques')">Next: Task 2</button>
+    </div>
+  </div>
+  
+  <!-- TECHNIQUES SECTION: Task 2 - Research Page -->
+  <div id="techniques" class="content-section">
+    <div class="section-banner techniques-banner">
+      TASK 2: REFINED RESEARCH PAGE - Applying Digital Techniques
+    </div>
+    
+    <div class="techniques-section">
+      <div class="workflow-box" style="border-color: var(--techniques);">
+        <div class="workflow-header" style="background: var(--techniques);">
+          <h3>Creating Your Refined Research Page</h3>
+        </div>
+        <div class="workflow-steps">
+          <div class="step">
+            <div class="step-number" style="background: var(--techniques);">1</div>
+            <div class="step-title" style="color: var(--techniques);">Select an Artist/Designer</div>
+            <div class="step-content">
+              <ul>
+                <li>Choose an artist or designer connected to your theme</li>
+                <li>Research their work, focusing on visual elements</li>
+                <li>Gather high-quality images of their work</li>
+                <li>Find relevant quotes or information about their practice</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number" style="background: var(--techniques);">2</div>
+            <div class="step-title" style="color: var(--techniques);">Analyze and Select Details</div>
+            <div class="step-content">
+              <ul>
+                <li>Identify important details in the artwork to highlight</li>
+                <li>Consider what makes these details significant</li>
+                <li>Plan how enlarged details will enhance understanding</li>
+                <li>Think about visual connections between elements</li>
+              </ul>
+              <img class="step-image" src="detail_selection.jpg" alt="Example of selecting important details to highlight" onclick="openModal(this.src)">
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number" style="background: var(--techniques);">3</div>
+            <div class="step-title" style="color: var(--techniques);">Apply Digital Techniques</div>
+            <div class="step-content">
+              <ul>
+                <li>Use techniques practiced in Task 1</li>
+                <li>Enlarge selected details for emphasis</li>
+                <li>Apply noise filters to enhance texture</li>
+                <li>Add color effects to create visual relationships</li>
+                <li>Ensure techniques enhance rather than distract from content</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number" style="background: var(--techniques);">4</div>
+            <div class="step-title" style="color: var(--techniques);">Proper Citation and Layout</div>
+            <div class="step-content">
+              <ul>
+                <li>Include proper Harvard referencing for all images</li>
+                <li>Format: <strong>Creator's Surname, Initial. (Year) Title of Work [Medium]</strong></li>
+                <li>Add relevant quotes with citations</li>
+                <li>Create a well-balanced layout with clear hierarchy</li>
+                <li>Ensure all text is readable and appropriately sized</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Harvard Referencing Guide -->
+      <h2>Harvard Referencing Guide <span class="techniques-label">Required</span></h2>
+      
+      <div class="term-box">
+        <strong>Why Proper Referencing Matters:</strong>
+        <ul>
+          <li>Shows academic integrity in your research</li>
+          <li>Gives appropriate credit to creators</li>
+          <li>Allows viewers to find your sources</li>
+          <li>Demonstrates professional research standards</li>
+        </ul>
+      </div>
+      
+      <div class="technique-grid">
+        <div class="technique-card">
+          <div class="technique-header">Referencing Images</div>
+          <div class="technique-content">
+            <p>Format: <strong>Creator's Surname, Initial. (Year) Title of Work [Medium]</strong></p>
+            <p>Examples:</p>
+            <ul>
+              <li>Kusama, Y. (2016) Infinity Mirrors [Installation]</li>
+              <li>Sherman, C. (1981) Untitled #96 [Photograph]</li>
+              <li>Tate Gallery. (2020) Modern Movements [Exhibition]</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="technique-card">
+          <div class="technique-header">Referencing Quotes</div>
+          <div class="technique-content">
+            <p>Format: <strong>"Quote text" (Surname, Year, p.X)</strong></p>
+            <p>Examples:</p>
+            <ul>
+              <li>"My art originates from hallucinations only I can see." (Kusama, 2002, p.23)</li>
+              <li>"Photography has always been about fiction, right from the beginning." (Sherman, 2003, p.117)</li>
+            </ul>
+            <p>For online sources without page numbers, omit the page reference.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Example Analysis -->
+      <h2>Example Analysis <span class="techniques-label">Reference</span></h2>
+      
+      <div class="example-section">
+        <h3 class="example-title">Student Example Analysis</h3>
+        
+        <div class="example-image-container">
+          <img src="student_example.jpg" alt="Student research page with enlarged details and proper citations" class="example-image" onclick="openModal(this.src)">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+          <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <h4 style="color: var(--techniques); margin-top: 0; font-size: 1.2rem;">Effective Elements:</h4>
+            <ul>
+              <li>Clear enlargement of important textile details</li>
+              <li>Proper Harvard referencing for all images</li>
+              <li>Thoughtful use of color to create connections</li>
+              <li>Well-balanced layout with good visual hierarchy</li>
+              <li>Strategic use of noise filters to enhance texture</li>
+            </ul>
+          </div>
+          
+          <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <h4 style="color: var(--techniques); margin-top: 0; font-size: 1.2rem;">Technical Analysis:</h4>
+            <ul>
+              <li>Notice how enlarged details focus on texture and pattern</li>
+              <li>Color overlays create cohesive visual language</li>
+              <li>Noise filter enhances fabric textures subtly</li>
+              <li>Text is integrated without overwhelming visuals</li>
+              <li>Citations are complete and properly formatted</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Layout and Design Tips -->
+      <h2>Design Considerations <span class="techniques-label">Tips</span></h2>
+      
+      <div class="activity-grid">
+        <div class="activity-box">
+          <h4>Visual Hierarchy</h4>
+          <ul>
+            <li>Make important elements larger</li>
+            <li>Use space to create focus points</li>
+            <li>Consider the viewing pathway</li>
+            <li>Ensure the eye follows logical sequence</li>
+          </ul>
+        </div>
+        
+        <div class="activity-box">
+          <h4>Detail Selection</h4>
+          <ul>
+            <li>Choose details that reveal something significant</li>
+            <li>Enlarge elements that might be overlooked</li>
+            <li>Focus on textures, patterns, or techniques</li>
+            <li>Balance macro and full views</li>
+          </ul>
+        </div>
+        
+        <div class="activity-box">
+          <h4>Visual Connections</h4>
+          <ul>
+            <li>Use color to link related elements</li>
+            <li>Create visual relationships between details</li>
+            <li>Align elements on invisible grid lines</li>
+            <li>Use consistent treatment for similar items</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- UPDATED SUBMISSION SECTION -->
+      <h2>What to Submit <span class="techniques-label">Submit</span></h2>
+      
+      <div style="background: var(--techniques-light); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 30px 0; border: 3px dashed var(--techniques);">
+        <h3 style="color: var(--techniques); text-align: center; margin-top: 0; margin-bottom: 15px;">Upload to Padlet</h3>
+        
+        <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px;">
+          <p style="margin-bottom: 5px;">Share your research page with digital techniques applied.</p>
+          <p style="margin-bottom: 0;">Name: <strong>LASTNAME_task2.jpg</strong></p>
+        </div>
+ 
+        <!-- Padlet embed -->
+        <iframe style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 8px;" width="100%" height="400" src="https://artslondon.padlet.org/hstokes12/week-6-noise-filters-colour-effects-and-enlarging-details-nouw07zqdt1iawdx" frameborder="0" allow="camera;microphone;geolocation"></iframe>
+    </div>
+    
+    <div class="nav-buttons">
+      <button class="nav-btn prev-btn" onclick="goToSection('task')">Previous: Task 1</button>
+      <button class="nav-btn next-btn" onclick="goToSection('quiz')">Next: Knowledge Check</button>
+    </div>
+  </div>
+  
+  <!-- QUIZ SECTION -->
+  <div id="quiz" class="content-section">
+    <div class="section-banner quiz-banner">
+      KNOWLEDGE CHECK: Test Your Understanding
+    </div>
+    
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <h3>Digital Techniques & Research Page Quiz</h3>
+      </div>
+      
+      <div class="quiz-content">
+        <div class="quiz-question">1. When enlarging details from an artwork, which tool would you use to make a selection?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectOption(this)">Text Tool</div>
+          <div class="quiz-option" onclick="selectOption(this)">Marquee Tool</div>
+          <div class="quiz-option" onclick="selectOption(this)">Brush Tool</div>
+          <div class="quiz-option" onclick="selectOption(this)">Eraser Tool</div>
+        </div>
+        <div class="quiz-feedback"></div>
+        
+        <div class="quiz-question">2. What is the correct Harvard referencing format for an artwork?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectOption(this)">Creator's Surname, Initial. (Year) Title of Work [Medium]</div>
+          <div class="quiz-option" onclick="selectOption(this)">Title of Work by Creator (Year) [Medium]</div>
+          <div class="quiz-option" onclick="selectOption(this)">Creator (Year): "Title of Work" [Medium]</div>
+          <div class="quiz-option" onclick="selectOption(this)">Work Title - Creator's Name, Year, Medium</div>
+        </div>
+        <div class="quiz-feedback"></div>
+        
+        <div class="quiz-question">3. Which setting should you check when applying a noise filter to avoid color speckles?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectOption(this)">Monochromatic</div>
+          <div class="quiz-option" onclick="selectOption(this)">Gaussian</div>
+          <div class="quiz-option" onclick="selectOption(this)">Uniform</div>
+          <div class="quiz-option" onclick="selectOption(this)">Transparent</div>
+        </div>
+        <div class="quiz-feedback"></div>
+        
+        <div class="quiz-question">4. Which blending mode would you use to darken an image while adding color?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectOption(this)">Screen</div>
+          <div class="quiz-option" onclick="selectOption(this)">Multiply</div>
+          <div class="quiz-option" onclick="selectOption(this)">Normal</div>
+          <div class="quiz-option" onclick="selectOption(this)">Lighten</div>
+        </div>
+        <div class="quiz-feedback"></div>
+        
+        <div class="quiz-question">5. What is the purpose of enlarging details in a research page?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectOption(this)">To fill empty space on the page</div>
+          <div class="quiz-option" onclick="selectOption(this)">To highlight significant elements that might be overlooked</div>
+          <div class="quiz-option" onclick="selectOption(this)">To make the page look more complex</div>
+          <div class="quiz-option" onclick="selectOption(this)">To avoid using the entire artwork image</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </div>
+    
+    <!-- Self-Reflection -->
+    <div class="prep-box" style="border-color: var(--quiz); background-color: var(--quiz-light);">
+      <h3 style="color: var(--quiz);">Reflect on Your Learning</h3>
+      
+      <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        <p>Take a moment to reflect on what you've learned in this workshop:</p>
+        <ol>
+          <li><strong>Which digital technique did you find most useful for highlighting details?</strong></li>
+          <li><strong>How did enlarging details enhance your understanding of the artwork?</strong></li>
+          <li><strong>What challenges did you face when applying these techniques?</strong></li>
+          <li><strong>How will you apply these skills in future research pages?</strong></li>
+        </ol>
+        <p style="font-style: italic; margin-top: 15px;">Write your reflections in your digital journal to track your progress throughout the term.</p>
+      </div>
+    </div>
+    
+    <div class="nav-buttons">
+      <button class="nav-btn prev-btn" onclick="goToSection('techniques')">Previous: Task 2</button>
+      <button class="nav-btn next-btn" onclick="goToSection('overview')">Back to Overview</button>
+    </div>
+  </div>
+
+  <!-- Modal for image viewing -->
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+</div>
+
+<script>
+// Image Modal Functionality
+function openModal(src) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  modal.style.display = "block";
+  modalImg.src = src;
+}
+
+// Section Navigation
+const sections = ['overview', 'task', 'techniques', 'quiz'];
+let currentSection = 'overview';
+
+function goToSection(sectionId) {
+  if (!sectionId) return;
+  
+  // Hide all sections
+  document.querySelectorAll('.content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Show the selected section
+  document.getElementById(sectionId).classList.add('active');
+  
+  // Update active navigation block
+  document.querySelectorAll('.nav-block').forEach(block => {
+    block.classList.remove('active-block');
+    if (block.dataset.section === sectionId) {
+      block.classList.add('active-block');
+    }
+  });
+  
+  // Update current section
+  currentSection = sectionId;
+  
+  // Update progress bar
+  updateProgressBar();
+  
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
+
+function updateProgressBar() {
+  const progressBar = document.getElementById('progressBar');
+  const index = sections.indexOf(currentSection);
+  const percentage = ((index + 1) / sections.length) * 100;
+  progressBar.style.width = `${percentage}%`;
+}
+
+// Quiz functionality
+function selectOption(element) {
+  // Clear any previously selected options in this question group
+  const questionGroup = element.parentElement;
+  questionGroup.querySelectorAll('.quiz-option').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+  
+  // Mark this option as selected
+  element.classList.add('selected');
+  
+  // Check the answer
+  const question = questionGroup.previousElementSibling.textContent;
+  const answer = element.textContent;
+  const feedback = questionGroup.nextElementSibling;
+  
+  // Define correct answers for each question
+  const correctAnswers = {
+    "1. When enlarging details from an artwork, which tool would you use to make a selection?": "Marquee Tool",
+    "2. What is the correct Harvard referencing format for an artwork?": "Creator's Surname, Initial. (Year) Title of Work [Medium]",
+    "3. Which setting should you check when applying a noise filter to avoid color speckles?": "Monochromatic",
+    "4. Which blending mode would you use to darken an image while adding color?": "Multiply",
+    "5. What is the purpose of enlarging details in a research page?": "To highlight significant elements that might be overlooked"
+  };
+  
+  // Check if answer is correct
+  if (answer === correctAnswers[question]) {
+    feedback.textContent = "Correct! Well done.";
+    feedback.className = "quiz-feedback correct";
+  } else {
+    feedback.textContent = "Incorrect. Try again.";
+    feedback.className = "quiz-feedback incorrect";
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('imageModal');
+  const closeBtn = document.getElementsByClassName('close')[0];
+  
+  // Close modal when clicking the × symbol
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = "none";
+    });
+  }
+  
+  // Close modal when clicking outside the image
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+  
+  // Set up navigation blocks
+  document.querySelectorAll('.nav-block').forEach(block => {
+    block.addEventListener('click', () => {
+      goToSection(block.dataset.section);
+    });
+  });
+  
+  // Initialize progress bar and active section
+  document.querySelector('.nav-block[data-section="overview"]').classList.add('active-block');
+  updateProgressBar();
+});
+</script>
+
+</body>
+</html>

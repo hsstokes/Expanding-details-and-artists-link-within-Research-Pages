@@ -3,1870 +3,1293 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Expanding details and artists link within Research Pages</title>
+<title>Expanding Details in Research Pages</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap');
+
 :root {
-  --primary: #ea37a3;
-  --primary-light: #fdf1f5;
-  --secondary: #0a8080;
-  --secondary-light: #f5ffff;
-  --dark: #222;
-  --light: #fff;
-  --grid-light: #e0e0e0;
-  --homework: #ea37a3;
-  --homework-light: #fdf1f5;
-  --inclass: #0a8080;
-  --inclass-light: #f5ffff;
-  --homework-banner: #ffebf5;
-  --inclass-banner: #e6ffff;
-  --quiz: #4682b4;
-  --quiz-light: #f0f8ff;
-  --task: #ea37a3;
-  --task-light: #fdf1f5;
-  --techniques: #0a8080;
-  --techniques-light: #f5ffff;
-  --task-banner: #ffebf5;
-  --techniques-banner: #e6ffff;
-  --documentation: #8a2be2;
-  --documentation-light: #f5f0ff;
+  --ink: #1a1a1a;
+  --paper: #f2ede8;
+  --grid: #ddd8d2;
+  --teal: #0a7a7a;
+  --teal-light: #e3f2f2;
+  --pink: #ea37a3;
+  --pink-light: #fde8f4;
+  --purple: #6c35c9;
+  --purple-light: #efe8fb;
+  --blue: #2563a8;
+  --blue-light: #e6eef8;
+  --gold: #c87900;
+  --gold-light: #fbf0dc;
+  --warm-mid: #d4cfc8;
+  --concrete: #8a8a8a;
+  --white: #ffffff;
+  --green: #1f7a3d;
+  --green-light: #e4f4e9;
+  --red: #b3261e;
+  --red-light: #fbe7e5;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: "Typewriter Condensed", "Courier New", monospace;
-  background-image:
-    linear-gradient(var(--grid-light) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-light) 1px, transparent 1px);
-  background-size: 20px 20px, 20px 20px;
-  background-attachment: fixed;
-  color: var(--dark);
-  padding: 20px;
-  line-height: 1.6;
+  font-family: "IBM Plex Mono", "Courier New", monospace;
   font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-attachment: fixed;
+  padding: 24px 16px 80px;
 }
 
-.container {
-  max-width: 1000px;
-  width: 95%; /* Add this line */
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.97);
-  border: 3px solid var(--primary);
-  border-radius: 12px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
-  padding: 2rem;
-}
+.page { max-width: 1000px; margin: 0 auto; }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-  }
+/* ---------- Header ---------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 18px;
+  border-bottom: 3px solid var(--ink);
+  margin-bottom: 24px;
 }
-
-/* Block-based navigation */
-.content-section {
-  display: none;
-  overflow: auto; /* Add this line */
-  width: 100%; /* Add this line */
-  box-sizing: border-box; /* Add this line */
+.eyebrow {
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--concrete);
+  margin-bottom: 8px;
 }
+h1 {
+  font-family: "DM Serif Display", serif;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 6vw, 3.6rem);
+  line-height: 1.05;
+}
+h1 em { color: var(--teal); font-style: italic; display: block; }
+.meta {
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  text-align: right;
+  color: var(--concrete);
+}
+.meta strong { color: var(--ink); display: block; font-size: 0.95rem; }
+@media (max-width: 600px) { .meta { text-align: left; } }
 
-.content-section.active {
+/* ---------- Progress + nav ---------- */
+.progress-track {
+  height: 8px;
+  background: var(--warm-mid);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--pink), var(--teal));
+  transition: width 0.3s ease;
+}
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.nav-block {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-top: 6px solid var(--c);
+  padding: 12px 10px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.nav-block:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+.nav-block .n {
+  font-family: "Space Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--c);
+  font-weight: 700;
   display: block;
-  animation: fadeIn 0.5s ease;
+}
+.nav-block .t { font-size: 0.9rem; font-weight: 600; display: block; line-height: 1.3; }
+.nav-block.active { background: var(--c); color: var(--white); box-shadow: 3px 3px 0 var(--ink); }
+.nav-block.active .n { color: var(--white); }
+
+/* ---------- Sections ---------- */
+.content-section { display: none; }
+.content-section.active { display: block; animation: fade 0.3s ease; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.section-banner {
+  background: var(--c);
+  color: var(--white);
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 14px 20px;
+  margin-bottom: 18px;
+}
+h2 {
+  font-family: "DM Serif Display", serif;
+  font-weight: 400;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 30px 0 10px;
+}
+h2::before {
+  content: "";
+  width: 5px;
+  height: 28px;
+  background: var(--pink);
+  flex-shrink: 0;
+}
+.intro { margin-bottom: 18px; max-width: 70ch; }
+
+.rule {
+  height: 6px;
+  margin: 40px 0;
+  background: linear-gradient(90deg, var(--pink), var(--teal));
+  transform: skewX(-15deg);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* ---------- Cards ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  padding: 18px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.card .label {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cc, var(--teal));
+  margin-bottom: 8px;
+}
+.card ul, .acc-body ul, .acc-body ol, .dark-panel ul { list-style: none; }
+.card li, .acc-body li, .dark-panel li {
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.card li::before, .acc-body ul li::before, .dark-panel li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--cc, var(--teal));
+}
+.acc-body ol { counter-reset: n; }
+.acc-body ol li { counter-increment: n; padding-left: 26px; }
+.acc-body ol li::before {
+  content: counter(n) ".";
+  position: absolute; left: 0;
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  color: var(--c);
 }
 
-.main-navigation {
+/* Overview hero */
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 700px) { .hero { grid-template-columns: 1fr; } }
+
+/* ---------- Key badges ---------- */
+.key {
+  display: inline-block;
+  font-family: "Space Mono", monospace;
+  font-size: 0.82em;
+  font-weight: 700;
+  background: var(--white);
+  border: 1.5px solid var(--ink);
+  border-bottom-width: 3px;
+  padding: 0 7px;
+  margin: 0 1px;
+  white-space: nowrap;
+}
+.menu {
+  font-family: "Space Mono", monospace;
+  font-size: 0.85em;
+  background: var(--teal-light);
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+/* ---------- Accordion ---------- */
+.accordion { display: grid; gap: 10px; }
+.acc {
+  background: var(--white);
+  border: 2px solid var(--ink);
+}
+.acc-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: none;
+  border: none;
+  padding: 12px 14px;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.acc-num {
+  width: 38px; height: 38px;
+  flex-shrink: 0;
+  background: var(--c);
+  color: var(--white);
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.acc-title { flex: 1; font-family: "Space Mono", monospace; font-weight: 700; font-size: 0.95rem; }
+.acc-arrow { font-size: 1.1rem; transition: transform 0.2s ease; }
+.acc.open .acc-arrow { transform: rotate(90deg); }
+.acc-body { display: none; padding: 4px 18px 18px 66px; }
+.acc.open .acc-body { display: block; }
+@media (max-width: 600px) { .acc-body { padding: 4px 14px 16px; } }
+
+/* ---------- Video ---------- */
+.video {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  margin-top: 6px;
+}
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* ---------- Images ---------- */
+.thumb {
+  position: relative;
+  cursor: zoom-in;
+  border: 2px solid var(--warm-mid);
+  background: #2c2c2c;
+  overflow: hidden;
+  margin-top: 12px;
+}
+.thumb img {
+  width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  display: block;
+  background: var(--white);
+}
+.thumb .enlarge {
+  position: absolute;
+  bottom: 8px; right: 8px;
+  background: rgba(26,26,26,0.85);
+  color: var(--white);
+  font-family: "Space Mono", monospace;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+}
+.thumb .missing-note {
+  display: none;
+  min-height: 160px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--concrete);
+}
+.thumb.missing { cursor: default; }
+.thumb.missing img, .thumb.missing .enlarge { display: none; }
+.thumb.missing .missing-note { display: flex; }
+
+/* ---------- Dark annotation panel ---------- */
+.dark-panel {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 22px;
+}
+.panel-label {
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 12px;
+}
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.example-grid .thumb img { height: 200px; object-fit: cover; }
+.caption {
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  margin-top: 8px;
+  color: var(--warm-mid);
+}
+.caption strong { color: var(--white); display: block; }
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.note-box { border: 1px solid #444; padding: 14px; }
+.note-box h4 {
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #7fd3d3;
+  margin-bottom: 8px;
+}
+.dark-panel li::before { color: var(--pink); }
+
+/* ---------- Info boxes ---------- */
+.why-box, .tip-box, .format {
+  border-left: 5px solid var(--c);
+  background: var(--cl);
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+.why-box strong, .tip-box strong { color: var(--c); }
+.format { font-family: "Space Mono", monospace; font-size: 0.9rem; }
+.tip-box ul { margin-top: 6px; }
+
+.reflect-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin: 25px 0;
+  gap: 12px;
+  margin-top: 10px;
+}
+.reflect {
+  background: var(--blue-light);
+  border: 2px solid var(--blue);
+  padding: 12px;
+}
+.reflect .label {
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--blue);
+  margin-bottom: 4px;
 }
 
-.nav-block {
-  background: #f8f8f8;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.nav-block:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-
-.nav-block h3 {
-  font-size: 1.2rem;
-  margin: 0 0 8px 0;
-  position: relative;
-  z-index: 2;
-}
-
-.nav-block p {
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
   font-size: 0.9rem;
-  margin: 0;
-  opacity: 0.8;
-  position: relative;
-  z-index: 2;
+  padding: 12px 20px;
+  border: 2px solid var(--ink);
+  background: var(--c);
+  color: var(--white);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+  margin-top: 8px;
 }
-
-.nav-block::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: 150px;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.1;
-  z-index: 1;
-}
-
-.nav-overview {
-  border-color: var(--secondary);
-  background-color: var(--secondary-light);
-}
-
-.nav-overview h3 {
-  color: var(--secondary);
-}
-
-.nav-overview::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z" fill="%230a8080"/></svg>');
-}
-
-.nav-task {
-  border-color: var(--task);
-  background-color: var(--task-light);
-}
-
-.nav-task h3 {
-  color: var(--task);
-}
-
-.nav-task::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z" fill="%23ea37a3"/></svg>');
-}
-
-.nav-techniques {
-  border-color: var(--techniques);
-  background-color: var(--techniques-light);
-}
-
-.nav-techniques h3 {
-  color: var(--techniques);
-}
-
-.nav-techniques::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M184 48H328c4.4 0 8 3.6 8 8V96H176V56c0-4.4 3.6-8 8-8zm-56 8V96H64C28.7 96 0 124.7 0 160v96H192 320 512V160c0-35.3-28.7-64-64-64H384V56c0-30.9-25.1-56-56-56H184c-30.9 0-56 25.1-56 56zM512 288H320v32c0 17.7-14.3 32-32 32H224c-17.7 0-32-14.3-32-32V288H0V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V288z" fill="%230a8080"/></svg>');
-}
-
-.nav-quiz {
-  border-color: var(--quiz);
-  background-color: var(--quiz-light);
-}
-
-.nav-quiz h3 {
-  color: var(--quiz);
-}
-
-.nav-quiz::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM288 352a32 32 0 1 1 -64 0 32 32 0 1 1 64 0z" fill="%234682b4"/></svg>');
-}
-
-.active-block {
-  background-color: var(--secondary);
-  color: white;
-  box-shadow: 0 8px 20px rgba(10, 128, 128, 0.3);
-  transform: translateY(-5px);
-}
-
-.active-block h3, .active-block p {
-  color: white;
-}
-
-.active-block::before {
-  opacity: 0.2;
-}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
 
 .nav-buttons {
   display: flex;
   justify-content: space-between;
-  margin: 30px 0 20px;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px dashed var(--warm-mid);
+}
+.prev-btn, .next-btn {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 10px 16px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+}
+.prev-btn { background: var(--white); color: var(--ink); }
+.prev-btn[disabled] { opacity: 0.35; cursor: default; }
+.next-btn { background: var(--ink); color: var(--white); margin-left: auto; }
+
+/* ---------- Submit ---------- */
+.file-name {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  background: var(--gold-light);
+  padding: 2px 8px;
+  word-break: break-all;
+}
+.padlet-box {
+  background: var(--gold-light);
+  border: 3px dashed var(--gold);
+  padding: 22px;
+  text-align: center;
+  margin-top: 20px;
 }
 
-.nav-btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* ---------- Checklist ---------- */
+.checklist {
+  background: var(--white);
+  border: 2px solid var(--c);
+  padding: 18px 20px;
+  margin-top: 28px;
+}
+.checklist h3 {
+  font-family: "Space Mono", monospace;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--c);
+  margin-bottom: 8px;
+}
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background: none;
   border: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.nav-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-.prev-btn {
-  background-color: #f2f2f2;
-  color: #555;
-}
-
-.prev-btn::before {
-  content: "←";
-}
-
-.next-btn {
-  background-color: var(--secondary);
-  color: white;
-}
-
-.next-btn::after {
-  content: "→";
-}
-
-.progress-bar-container {
-  height: 10px;
-  background-color: #eee;
-  border-radius: 5px;
-  margin: 20px 0;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  background-color: var(--secondary);
-  width: 0%;
-  transition: width 0.3s ease;
-}
-
-/* Typography */
-h1, h2, h3 {
-  font-family: "Typewriter Condensed", "Courier New", monospace;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.8em;
-}
-
-h1 {
-  color: var(--primary);
-  font-size: 2.5rem;
-  border-bottom: 2px solid var(--secondary);
-  padding-bottom: 15px;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-weight: bold;
-}
-
-h2 {
-  color: var(--secondary);
-  font-size: 1.6rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-}
-
-h2::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 25px;
-  background: var(--primary);
-  margin-right: 15px;
-}
-
-h3 {
-  font-size: 1.4rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--primary);
-}
-
-p {
-  line-height: 1.8;
-  margin-bottom: 1.2em;
-  font-size: 1.1rem;
-}
-
-/* Add these lines */
-p, li, .quiz-option, a, h3, h4 {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
-}
-
-/* Video tutorials */
-.video-tutorial {
-  margin: 30px 0;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  border: 2px solid var(--secondary);
-}
-
-.video-wrapper {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
-  overflow: hidden;
-}
-
-.video-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.video-caption {
-  background: var(--secondary);
-  color: white;
-  padding: 12px;
-  font-weight: bold;
-  text-align: center;
-  font-size: 1.1rem;
-}
-
-/* Workflow box */
-.workflow-box {
-  background: #f8f8f8;
-  margin: 35px 0;
-  border-radius: 15px;
-  border: 3px solid var(--secondary);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
-
-.workflow-header {
-  background: var(--secondary);
-  color: white;
-  padding: 15px 20px;
-  text-align: center;
-}
-
-.workflow-header h3 {
-  margin: 0;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.workflow-steps {
-  padding: 20px 25px;
-}
-
-.step {
-  position: relative;
-  padding: 20px 20px 20px 50px;
-  background: white;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-.step-number {
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  background: var(--primary);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.step-title {
-  color: var(--primary);
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-.step-content ul, .step-content ol {
-  margin-left: 20px;
-  margin-bottom: 15px;
-}
-
-.step-content li {
-  margin-bottom: 8px;
-}
-
-.step-image {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  max-height: 300px;
-  border-radius: 8px;
-  margin: 15px auto;
-  display: block;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  border: 2px solid #eee;
-  object-fit: contain;
-}
-
-.step-image:hover {
-  transform: scale(1.03);
-  border-color: var(--secondary);
-}
-
-/* Term explanation box */
-.term-box {
-  background: #f8f9fa;
-  border-left: 6px solid #17a2b8;
-  padding: 15px 20px;
-  margin: 20px 0;
-  font-size: 1rem;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-  border-radius: 0 8px 8px 0;
-}
-
-.term-box strong {
-  color: #17a2b8;
-}
-
-.term-box ul {
-  margin-left: 25px;
-  margin-top: 10px;
-}
-
-.term-box li {
-  margin-bottom: 8px;
-}
-
-/* Important notice */
-.important-notice {
-  margin-bottom: 20px; 
-  padding: 15px 20px; 
-  background: rgba(234, 55, 163, 0.15); 
-  border-left: 5px solid var(--primary); 
-  border-radius: 8px;
-  font-size: 1.1rem;
-}
-
-.important-notice strong {
-  color: var(--primary);
-}
-
-/* Shortcut */
-.shortcut {
-  display: inline-block;
-  padding: 3px 10px;
-  background: #f2f2f2;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 1em;
-  margin: 0 2px;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-}
-
-/* Example section */
-.example-section {
-  background: #f8f8f8; 
-  padding: 30px; 
-  border-radius: 15px; 
-  margin: 30px 0;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.example-title {
-  color: var(--secondary); 
-  margin-top: 0;
-  text-align: center;
-  font-size: 1.4rem;
-  margin-bottom: 25px;
-}
-
-.example-image-container {
-  text-align: center; 
-  margin-bottom: 25px;
-}
-
-.example-image {
-  width: 90%; 
-  max-width: 700px; 
-  border: 3px solid #ddd; 
-  border-radius: 10px; 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  object-fit: contain;
-  max-height: 500px;
-}
-
-.example-image:hover {
-  transform: scale(1.02);
-  border-color: var(--secondary);
-}
-
-/* Artist gallery */
-.artist-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  margin: 25px 0;
-}
-
-.artist-item {
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  transition: all 0.3s ease;
-  position: relative;
-  border: 2px solid #eee;
-}
-
-.artist-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-  border-color: var(--secondary);
-}
-
-.artist-image {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
+  border-bottom: 1px dashed var(--warm-mid);
+  padding: 10px 2px;
+  font: inherit;
+  color: inherit;
+  text-align: left;
   cursor: pointer;
 }
-
-.artist-caption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.8);
-  color: white;
-  padding: 10px;
-  font-size: 0.95rem;
-  text-align: center;
+.check-item:last-of-type { border-bottom: none; }
+.box {
+  width: 24px; height: 24px;
+  border: 2px solid var(--c);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  color: var(--white);
+}
+.check-item.done .box { background: var(--c); }
+.check-item.done .box::after { content: "✓"; }
+.check-item.done .text { text-decoration: line-through; color: var(--concrete); }
+.check-count {
+  margin-top: 8px;
+  font-family: "Space Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--concrete);
+  text-align: right;
 }
 
-/* Workshop Overview Styling */
-.workshop-overview {
-  margin: 35px 0;
-  border-radius: 15px;
-  border: 3px solid var(--secondary);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  overflow: hidden;
-  background: #f8f8f8;
+/* ---------- Quiz ---------- */
+.q {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  padding: 18px;
+  margin-bottom: 14px;
 }
-
-.workshop-header {
-  background: var(--secondary);
-  color: white;
-  padding: 12px 20px;
-  text-align: center;
-}
-
-.workshop-header h3 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: white;
-}
-
-.workshop-title {
-  padding: 20px 25px 10px 25px;
-}
-
-.workshop-title h3 {
-  color: var(--secondary);
-  text-align: center;
-  font-size: 1.6rem;
-  margin: 0 0 20px 0;
-  border-bottom: 2px dashed var(--secondary);
-  padding-bottom: 15px;
-}
-
-.workshop-content {
-  padding: 0 25px 25px 25px;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 30px;
-  align-items: start;
-}
-
-.workshop-image {
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  border: 3px solid white;
+.q-text { font-weight: 600; margin-bottom: 10px; }
+.q-text span { font-family: "Space Mono", monospace; color: var(--purple); margin-right: 6px; }
+.options { display: grid; gap: 8px; }
+.opt {
+  font: inherit;
+  text-align: left;
+  background: var(--paper);
+  border: 2px solid var(--warm-mid);
+  padding: 10px 14px;
   cursor: pointer;
-  transition: transform 0.3s ease;
-  max-height: 400px;
-  object-fit: contain;
+  color: inherit;
 }
-
-.workshop-image:hover {
-  transform: scale(1.03);
-}
-
-.workshop-learning-points {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-.learning-points-title {
-  color: var(--primary);
-  margin-top: 0;
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  border-left: 5px solid var(--primary);
-  padding-left: 15px;
-}
-
-.learning-points-list {
-  list-style-type: none;
-  padding-left: 5px;
-}
-
-.learning-points-item {
-  margin-bottom: 10px;
-  position: relative;
-  padding-left: 25px;
-}
-
-.learning-points-item::before {
-  content: "•";
-  color: var(--primary);
-  position: absolute;
-  left: 0;
-  font-weight: bold;
-}
-
-.workshop-example-note {
-  background: rgba(234, 55, 163, 0.1);
-  padding: 10px 15px;
-  border-radius: 5px;
-  border-left: 4px solid var(--primary);
-  font-size: 0.95em;
-  font-style: italic;
-  margin-top: 15px;
-}
-
-/* Technique grid */
-.technique-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin: 25px 0;
-}
-
-.technique-card {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-  border: 2px solid var(--secondary-light);
-}
-
-.technique-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--secondary);
-}
-
-.technique-header {
-  background: var(--secondary-light);
-  padding: 15px 20px;
-  color: var(--secondary);
-  font-size: 1.2rem;
-  font-weight: bold;
-  border-bottom: 2px solid #eee;
-}
-
-.technique-content {
-  padding: 20px;
-}
-
-.technique-content ol {
-  margin-left: 20px;
-  margin-bottom: 15px;
-}
-
-.technique-content li {
-  margin-bottom: 10px;
-}
-
-.technique-image {
-  width: 100%;
-  height: 200px;
-  border-radius: 8px;
-  margin: 15px 0;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  cursor: pointer;
-  border: 2px solid #eee;
-  transition: transform 0.3s ease;
-  object-fit: contain;
-}
-
-.technique-image:hover {
-  transform: scale(1.02);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  border-color: var(--secondary);
-}
-
-/* Prep box */
-.prep-box {
-  border: 3px dashed var(--primary);
-  border-radius: 12px;
-  padding: 25px;
-  margin: 30px 0;
-  background-color: var(--primary-light);
-  position: relative;
-}
-
-.prep-box h3 {
-  color: var(--primary);
-  margin-top: 0;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+.opt:hover { border-color: var(--purple); }
+.opt.right { background: var(--green-light); border-color: var(--green); }
+.opt.wrong { background: var(--red-light); border-color: var(--red); }
+.feedback { margin-top: 10px; font-family: "Space Mono", monospace; font-size: 0.85rem; font-weight: 700; min-height: 1.2em; }
+.feedback.right { color: var(--green); }
+.feedback.wrong { color: var(--red); }
+.score {
+  background: var(--purple);
+  color: var(--white);
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  padding: 12px 18px;
   text-align: center;
 }
 
-/* Class activity */
-.class-activity {
-  margin-top: 40px; 
-  border: 3px solid var(--primary); 
-  border-radius: 15px; 
-  padding: 30px; 
-  background-color: var(--primary-light);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-.class-activity h3 {
-  color: var(--primary); 
-  margin-top: 0;
-  text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 25px;
-}
-
-/* Activity grid */
-.activity-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 25px;
-}
-
-.activity-box {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
-
-.activity-box:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.activity-box h4 {
-  margin-top: 0; 
-  color: var(--secondary);
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 10px;
-}
-
-/* Modal for image viewing */
-.modal {
+/* ---------- Lightbox ---------- */
+.lightbox {
   display: none;
   position: fixed;
+  inset: 0;
+  background: rgba(26,26,26,0.92);
   z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.85);
-  overflow: auto;
-}
-
-.modal-content {
-  margin: auto;
-  display: block;
-  max-width: 90%;
-  max-height: 90%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 3px solid white;
-  border-radius: 5px;
-}
-
-.close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
-  font-size: 40px;
-  font-weight: bold;
-  transition: 0.3s;
-  z-index: 1001;
-}
-
-.close:hover,
-.close:focus {
-  color: #bbb;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* NEW STYLES FOR TASK/TECHNIQUES DISTINCTION */
-.section-banner {
-  margin: 25px 0;
-  padding: 15px 20px;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.3rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  position: relative;
-  overflow: hidden;
-}
-
-.section-banner::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 100%;
-}
-
-.task-banner {
-  background-color: var(--task-banner);
-  border: 2px solid var(--task);
-  color: var(--task);
-}
-
-.task-banner::before {
-  background-color: var(--task);
-}
-
-.techniques-banner {
-  background-color: var(--techniques-banner);
-  border: 2px solid var(--techniques);
-  color: var(--techniques);
-}
-
-.techniques-banner::before {
-  background-color: var(--techniques);
-}
-
-.quiz-banner {
-  background-color: var(--quiz-light);
-  border: 2px solid var(--quiz);
-  color: var(--quiz);
-}
-
-.quiz-banner::before {
-  background-color: var(--quiz);
-}
-
-.task-section h2, 
-.task-section h3 {
-  color: var(--task);
-}
-
-.task-section h2::before {
-  background: var(--task);
-}
-
-.techniques-section h2, 
-.techniques-section h3 {
-  color: var(--techniques);
-}
-
-.techniques-section h2::before {
-  background: var(--techniques);
-}
-
-.task-label, .techniques-label {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  margin-left: 15px;
-  vertical-align: middle;
-}
-
-.task-label {
-  background-color: var(--task);
-  color: white;
-}
-
-.techniques-label {
-  background-color: var(--techniques);
-  color: white;
-}
-
-/* QUIZ STYLES */
-.quiz-container {
-  background-color: white;
-  margin: 30px auto;
-  padding: 0;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-  overflow: hidden;
-  border: 3px solid var(--quiz);
-}
-
-.quiz-header {
-  background-color: var(--quiz);
-  color: white;
-  padding: 15px;
-  text-align: center;
-}
-
-.quiz-header h3 {
-  margin: 0;
-  color: white;
-}
-
-.quiz-content {
+  align-items: center;
+  justify-content: center;
   padding: 20px;
 }
-
-.quiz-question {
-  margin-bottom: 20px;
-  font-weight: bold;
-  font-size: 1.1rem;
-  color: var(--quiz);
-}
-
-.quiz-options {
-  display: grid;
-  grid-gap: 10px;
-}
-
-.quiz-option {
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px 15px;
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 100%; max-height: 88vh; border: 3px solid var(--white); background: var(--white); }
+.lightbox-close {
+  position: absolute;
+  top: 10px; right: 16px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 2.4rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.quiz-option:hover {
-  background-color: var(--quiz-light);
-  border-color: var(--quiz);
-}
-
-.quiz-option.selected {
-  background-color: var(--quiz);
-  color: white;
-}
-
-.quiz-feedback {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 5px;
-  display: none;
-}
-
-.quiz-feedback.correct {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  display: block;
-}
-
-.quiz-feedback.incorrect {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-  display: block;
-}
-
-/* Add these additional fixes */
-
-/* Fix for quiz options that are overflowing */
-.quiz-option {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 15px;
-}
-
-/* Fix for Padlet upload instructions */
-[id^="upload-to-padlet"] ol,
-[id^="upload-to-padlet"] li,
-.upload-to-padlet ol,
-.upload-to-padlet li {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  width: 100%;
-  box-sizing: border-box;
-  padding-right: 15px;
-}
-
-/* Ensure all text containers have proper wrapping */
-.quiz-question,
-.reflection-questions p,
-.reflection-questions li,
-.design-tips li,
-.detail-selection li,
-.visual-connections li,
-.visual-hierarchy li,
-.how-to-submit li {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Fix for long URLs and text */
-a, pre, code {
-  word-break: break-all;
-  max-width: 100%;
-  display: inline-block;
-}
-
-/* Add these styles at the end of your CSS */
-.techniques-section, .task-section, .quiz-content {
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* Fix for Padlet submission boxes */
-[style*="background: var(--techniques-light)"],
-[style*="background: var(--task-light)"] {
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* Fix for links that might overflow */
-a {
-  word-break: break-all;
-}
-
-@media (max-width: 768px) {
-  .workshop-content {
-    grid-template-columns: 1fr;
-  }
-  .workflow-steps {
-    padding: 15px;
-  }
-  .step {
-    padding: 15px 15px 15px 40px;
-  }
-  .step-number {
-    width: 32px;
-    height: 32px;
-    left: -5px;
-    font-size: 1rem;
-  }
+  line-height: 1;
 }
 </style>
 </head>
 <body>
+<div class="page">
 
-<div class="container">
-  <h1>Expanding details and artists link within Research Pages</h1>
+  <header>
+    <div>
+      <div class="eyebrow">UAL · IELS Level 5 · Digital Skills · Week 6</div>
+      <h1>Expanding Details<em>in Research Pages</em></h1>
+    </div>
+    <div class="meta"><strong>2 tasks + report ↓</strong>then submit</div>
+  </header>
 
-  <!-- Workshop Structure Overview - Clear distinction between tasks and techniques -->
-  <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px dashed #666;">
-    <h3 style="text-align: center; margin-top: 0; color: #333;">Enlarging Details: Research Page Development</h3>
-    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 15px;">
-      <div style="flex: 1; min-width: 250px; background: var(--task-banner); padding: 15px; border-radius: 8px; border-left: 5px solid var(--task);">
-        <h4 style="margin-top: 0; color: var(--task);">TASK 1</h4>
-        <p style="margin-bottom: 0;">Digital techniques test</p>
-      </div>
-      <div style="flex: 1; min-width: 250px; background: var(--techniques-banner); padding: 15px; border-radius: 8px; border-left: 5px solid var(--techniques);">
-        <h4 style="margin-top: 0; color: var(--techniques);">TASK 2</h4>
-        <p style="margin-bottom: 0;">Research page with digital techniques</p>
-      </div>
-      <div style="flex: 1; min-width: 250px; background: var(--documentation-light); padding: 15px; border-radius: 8px; border-left: 5px solid var(--documentation);">
-        <h4 style="margin-top: 0; color: var(--documentation);">TASK 3</h4>
-        <p style="margin-bottom: 0;">Document your progress</p>
-      </div>
-    </div>
-  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 
-  <!-- Block-based navigation -->
-  <div class="progress-bar-container">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
+  <nav class="nav-grid" id="navGrid">
+    <button class="nav-block" data-section="overview" style="--c: var(--teal)"><span class="n">Start</span><span class="t">Overview</span></button>
+    <button class="nav-block" data-section="task1" style="--c: var(--pink)"><span class="n">Task 1</span><span class="t">Digital Techniques</span></button>
+    <button class="nav-block" data-section="task2" style="--c: var(--teal)"><span class="n">Task 2</span><span class="t">Research Page</span></button>
+    <button class="nav-block" data-section="report" style="--c: var(--blue)"><span class="n">Report</span><span class="t">Document &amp; Reflect</span></button>
+    <button class="nav-block" data-section="submit" style="--c: var(--gold)"><span class="n">Submit</span><span class="t">Upload to Padlet</span></button>
+    <button class="nav-block" data-section="quiz" style="--c: var(--purple)"><span class="n">Check</span><span class="t">Quick Quiz</span></button>
+  </nav>
 
-  <div class="main-navigation">
-    <div class="nav-block nav-overview" data-section="overview">
-      <h3>Overview</h3>
-      <p>Task Requirements</p>
-    </div>
-    <div class="nav-block nav-task" data-section="task">
-      <h3>Task 1</h3>
-      <p>Digital Techniques</p>
-    </div>
-    <div class="nav-block nav-techniques" data-section="techniques">
-      <h3>Task 2</h3>
-      <p>Research Page</p>
-    </div>
-    <div class="nav-block nav-task" data-section="documentation" style="border-color: var(--documentation); background-color: var(--documentation-light);">
-      <h3 style="color: var(--documentation);">Task 3</h3>
-      <p>Document Progress</p>
-    </div>
-    <div class="nav-block nav-quiz" data-section="quiz">
-      <h3>Knowledge Check</h3>
-      <p>Quick Quiz</p>
-    </div>
-  </div>
-  
-  <!-- OVERVIEW SECTION -->
-  <div id="overview" class="content-section active">
-    <div class="workshop-overview">
-      <div class="workshop-header">
-        <h3>Research Page Development</h3>
-      </div>
-      
-      <div class="workshop-title">
-        <h3>Creating Artist Research Pages with Details</h3>
-      </div>
-      
-      <div class="workshop-content">
-        <div>
-          <img src="research_page_example.jpg" alt="Research page example with enlarged details" class="workshop-image" onclick="openModal(this.src)">
-          <p style="text-align: center; font-style: italic; margin-top: 12px;">Example research page with enlarged details</p>
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="content-section" id="overview" style="--c: var(--teal); --cl: var(--teal-light)">
+    <div class="section-banner">📋 OVERVIEW — WHAT YOU WILL DO TODAY</div>
+    <p class="intro">You will make an artist research page. You will enlarge details from an artwork. You will use noise and colour effects.</p>
+
+    <div class="hero">
+      <div>
+        <div class="thumb" data-src="research_page_example.jpg">
+          <img src="research_page_example.jpg" alt="Research page example with enlarged details">
+          <div class="missing-note">Image not found:<br>research_page_example.jpg</div>
+          <span class="enlarge">🔍 Enlarge</span>
         </div>
-        
-        <div class="workshop-learning-points">
-          <h4 class="learning-points-title">What You'll Learn:</h4>
-          <ul class="learning-points-list">
-            <li class="learning-points-item">Selecting key details</li>
-            <li class="learning-points-item">Using digital techniques</li>
-            <li class="learning-points-item">Adding noise filters</li>
-            <li class="learning-points-item">Working with color effects</li>
-            <li class="learning-points-item">Creating visual connections</li>
-          </ul>
-        </div>
+        <p class="caption" style="color: var(--concrete)">Example research page with enlarged details</p>
+      </div>
+      <div class="card" style="--cc: var(--pink)">
+        <div class="label">What you'll learn</div>
+        <ul>
+          <li>Selecting key details</li>
+          <li>Using digital techniques</li>
+          <li>Adding noise filters</li>
+          <li>Working with colour effects</li>
+          <li>Creating visual connections</li>
+          <li>Reflection</li>
+        </ul>
       </div>
     </div>
 
-    <!-- Task Requirements -->
-    <h2>Task Requirements</h2>
-    
-    <div class="important-notice">
-      <strong>Three Tasks:</strong> Learn digital techniques, create a research page, and document your progress.
-    </div>
-    
-    <div class="technique-grid">
-      <div class="technique-card">
-        <div class="technique-header">Task 1: Digital Techniques</div>
-        <div class="technique-content">
-          <ul>
-            <li>Show you can enlarge details</li>
-            <li>Use noise filters</li>
-            <li>Apply color effects</li>
-            <li>Create technique samples</li>
-          </ul>
-        </div>
+    <h2>Your Tasks</h2>
+    <div class="card-grid">
+      <div class="card" style="--cc: var(--pink)">
+        <div class="label">Task 1 · Digital Techniques</div>
+        <ul>
+          <li>Enlarge details</li>
+          <li>Use noise filters</li>
+          <li>Apply colour effects</li>
+          <li>Make technique samples</li>
+        </ul>
       </div>
+      <div class="card" style="--cc: var(--teal)">
+        <div class="label">Task 2 · Research Page</div>
+        <ul>
+          <li>Make an artist research page</li>
+          <li>Use the Task 1 techniques</li>
+          <li>Include enlarged details</li>
+          <li>Reference sources correctly</li>
+          <li>Connect visual elements</li>
+        </ul>
+      </div>
+      <div class="card" style="--cc: var(--blue)">
+        <div class="label">Progress Report</div>
+        <ul>
+          <li>Record your process</li>
+          <li>Add screenshots</li>
+          <li>Share challenges and solutions</li>
+          <li>Reflect on your learning</li>
+        </ul>
+      </div>
+    </div>
 
-      <div class="technique-card">
-        <div class="technique-header">Task 2: Research Page</div>
-        <div class="technique-content">
-          <ul>
-            <li>Create artist research page</li>
-            <li>Apply digital techniques</li>
-            <li>Include enlarged details</li>
-            <li>Cite sources correctly</li>
-            <li>Connect visual elements</li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="technique-card">
-        <div class="technique-header">Task 3: Documentation</div>
-        <div class="technique-content">
-          <ul>
-            <li>Record your process</li>
-            <li>Reflect on your learning</li>
-            <li>Capture different stages</li>
-            <li>Share challenges and solutions</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Assessment Criteria -->
     <h2>Assessment Criteria</h2>
-    
-    <div class="activity-grid">
-      <div class="activity-box">
-        <h4>Technical Skills</h4>
+    <div class="card-grid">
+      <div class="card">
+        <div class="label">Technical Skills</div>
         <ul>
           <li>Correct use of techniques</li>
           <li>Good detail selection</li>
-          <li>Effective color and filters</li>
+          <li>Effective colour and filters</li>
         </ul>
       </div>
-      
-      <div class="activity-box">
-        <h4>Research</h4>
+      <div class="card">
+        <div class="label">Research</div>
         <ul>
           <li>Good artist research</li>
           <li>Artwork analysis</li>
-          <li>Proper citations</li>
+          <li>Correct references</li>
         </ul>
       </div>
-      
-      <div class="activity-box">
-        <h4>Visual Design</h4>
+      <div class="card">
+        <div class="label">Visual Design</div>
         <ul>
           <li>Clear layout</li>
           <li>Visual focus</li>
           <li>Purposeful design</li>
         </ul>
       </div>
-    </div>
-
-    <div class="nav-buttons">
-      <button class="nav-btn prev-btn" onclick="goToSection(null)" disabled>Previous</button>
-      <button class="nav-btn next-btn" onclick="goToSection('task')">Next: Task 1</button>
-    </div>
-  </div>
-
-  <!-- TASK SECTION: Task 1 - Digital Techniques -->
-  <div id="task" class="content-section">
-    <div class="section-banner task-banner">
-      TASK 1: DIGITAL TECHNIQUES
-    </div>
-    
-    <div class="task-section">
-      <!-- Video Tutorial -->
-      <div class="video-tutorial">
-        <div class="video-wrapper">
-          <iframe width="560" height="315" src="https://ual.cloud.panopto.eu/Panopto/Pages/Embed.aspx?id=2a3b5c8c-30ff-4bd7-ada8-b27b00980c43" title="Digital Techniques Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="video-caption">
-          Watch: Enlarging details and enhancing images
-        </div>
-      </div>
-      
-      <h2>Digital Techniques <span class="task-label">Learn</span></h2>
-      
-      <div class="workflow-box">
-        <div class="workflow-header">
-          <h3>Key Techniques</h3>
-        </div>
-        <div class="workflow-steps">
-          <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-title">Enlarging Details</div>
-            <div class="step-content">
-              <ul>
-                <li>Use Selection tools (Marquee, Lasso)</li>
-                <li>Copy and paste to new layers</li>
-                <li>Resize details for emphasis</li>
-              </ul>
-              <img class="step-image" src="technique_enlarging.jpg" alt="Enlarging details technique" onclick="openModal(this.src)">
-            </div>
-          </div>
-          
-          <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-title">Noise Filters</div>
-            <div class="step-content">
-              <ul>
-                <li>Go to Filter > Noise > Add Noise</li>
-                <li>Try 5-15% noise amount</li>
-                <li>Check "Monochromatic" option</li>
-              </ul>
-              <img class="step-image" src="technique_noise.jpg" alt="Noise filter application" onclick="openModal(this.src)">
-            </div>
-          </div>
-          
-          <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-title">Color Effects</div>
-            <div class="step-content">
-              <ul>
-                <li>Create new color layers</li>
-                <li>Try blending modes (Multiply, Overlay)</li>
-                <li>Adjust opacity (30-70%)</li>
-                <li>Use colors to connect elements</li>
-              </ul>
-              <img class="step-image" src="technique_color.jpg" alt="Color effects example" onclick="openModal(this.src)">
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Technique Practice -->
-      <h2>Practice Exercise <span class="task-label">Try</span></h2>
-      
-      <div class="class-activity">
-        <h3>Digital Technique Test</h3>
-        
-        <div class="activity-grid">
-          <div class="activity-box">
-            <h4>1. Choose Image</h4>
-            <ul>
-              <li>Pick an artwork</li>
-              <li>Find 2-3 important details</li>
-            </ul>
-          </div>
-          
-          <div class="activity-box">
-            <h4>2. Apply Techniques</h4>
-            <ul>
-              <li>Enlarge your details</li>
-              <li>Add noise filter</li>
-              <li>Try color effects</li>
-            </ul>
-          </div>
-          
-          <div class="activity-box">
-            <h4>3. Save Examples</h4>
-            <ul>
-              <li>Save before/after images</li>
-              <li>Note best settings</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Examples of techniques -->
-      <h2>Examples <span class="task-label">Reference</span></h2>
-      
-      <div class="technique-grid">
-        <div class="technique-card">
-          <div class="technique-header">Enlarged Details</div>
-          <div class="technique-content">
-            <img class="technique-image" src="example_enlarging.jpg" alt="Detail enlargement example" onclick="openModal(this.src)">
-            <p>Effective selection and enlargement of textile details</p>
-          </div>
-        </div>
-        
-        <div class="technique-card">
-          <div class="technique-header">Noise Filter</div>
-          <div class="technique-content">
-            <img class="technique-image" src="example_noise.jpg" alt="Noise filter example" onclick="openModal(this.src)">
-            <p>Noise filter adds texture and depth</p>
-          </div>
-        </div>
-        
-        <div class="technique-card">
-          <div class="technique-header">Color Effects</div>
-          <div class="technique-content">
-            <img class="technique-image" src="example_color.jpg" alt="Color effects example" onclick="openModal(this.src)">
-            <p>Color overlays create visual connections</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Deliverables - UPDATED SUBMISSION SECTION -->
-      <h2>Submit <span class="task-label">Upload</span></h2>
-      
-      <div style="background: var(--task-light); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 30px 0; border: 3px dashed var(--task);">
-        <h3 style="color: var(--task); text-align: center; margin-top: 0; margin-bottom: 15px;">Upload to Padlet</h3>
-        
-        <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px;">
-          <p style="margin-bottom: 5px;">Share one example of your digital techniques.</p>
-          <p style="margin-bottom: 0;">Name: <strong>FULL_NAME_task1.jpg</strong></p>
-        </div>
-
-        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 25px;">
-          <h4 style="color: var(--task); margin-top: 0; font-size: 1.2rem; margin-bottom: 15px;">How to Submit:</h4>
-          <ol>
-           <li>Go to Padlet</li>
-           <li>Click the "+" button</li>
-           <li>Add your Full name as title</li>
-           <li>Upload your image</li>
-           <li>Click "Publish"</li>
-          </ol>
-        </div>
-        
-        <div style="text-align: center; margin: 30px auto;">
-          <a href="https://artslondon.padlet.org/hstokes12/week-6-noise-filters-colour-effects-and-enlarging-details-nouw07zqdt1iawdx" target="_blank" style="display: inline-block; padding: 15px 30px; background-color: var(--task); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: all 0.3s ease; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(234, 55, 163, 0.3);">
-            Go to Padlet
-          </a>
-        </div>
-      </div>
-    
-      <div class="nav-buttons">
-        <button class="nav-btn prev-btn" onclick="goToSection('overview')">Previous: Overview</button>
-        <button class="nav-btn next-btn" onclick="goToSection('techniques')">Next: Task 2</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- TECHNIQUES SECTION: Task 2 - Research Page -->
-  <div id="techniques" class="content-section">
-    <div class="section-banner techniques-banner">
-      TASK 2: RESEARCH PAGE
-    </div>
-    
-    <div class="techniques-section">
-      <div class="workflow-box" style="border-color: var(--techniques);">
-        <div class="workflow-header" style="background: var(--techniques);">
-          <h3>Creating Your Research Page</h3>
-        </div>
-        <div class="workflow-steps">
-          <div class="step">
-            <div class="step-number" style="background: var(--techniques);">1</div>
-            <div class="step-title" style="color: var(--techniques);">Choose Artist</div>
-            <div class="step-content">
-              <ul>
-                <li>Select artist related to your theme</li>
-                <li>Find good quality images of their work</li>
-                <li>Gather quotes or info about their work</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div class="step">
-            <div class="step-number" style="background: var(--techniques);">2</div>
-            <div class="step-title" style="color: var(--techniques);">Select Details</div>
-            <div class="step-content">
-              <ul>
-                <li>Find important details to highlight</li>
-                <li>Choose details that show technique or concept</li>
-              </ul>
-              <img class="step-image" src="detail_selection.jpg" alt="Selecting important details" onclick="openModal(this.src)">
-            </div>
-          </div>
-          
-          <div class="step">
-            <div class="step-number" style="background: var(--techniques);">3</div>
-            <div class="step-title" style="color: var(--techniques);">Apply Techniques</div>
-            <div class="step-content">
-              <ul>
-                <li>Use skills from Task 1</li>
-                <li>Enlarge your chosen details</li>
-                <li>Add noise filters for texture</li>
-                <li>Use color to link elements</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div class="step">
-            <div class="step-number" style="background: var(--techniques);">4</div>
-            <div class="step-title" style="color: var(--techniques);">Add Citations</div>
-            <div class="step-content">
-              <ul>
-                <li>Include Harvard referencing</li>
-                <li>Format: <strong>Surname, Initial. (Year) Title [Medium]</strong></li>
-                <li>Create balanced layout</li>
-                <li>Make text readable</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Harvard Referencing Guide -->
-      <h2>Referencing Guide <span class="techniques-label">Required</span></h2>
-      
-      <div class="term-box">
-        <strong>Why Cite Sources:</strong>
+      <div class="card" style="--cc: var(--blue)">
+        <div class="label">Reflection</div>
         <ul>
-          <li>Shows academic integrity</li>
-          <li>Gives credit to creators</li>
-          <li>Shows professional standards</li>
+          <li>Explain how you worked</li>
+          <li>Name challenges</li>
+          <li>Plan next steps</li>
         </ul>
       </div>
-      
-      <div class="technique-grid">
-        <div class="technique-card">
-          <div class="technique-header">Image References</div>
-          <div class="technique-content">
-            <p>Format: <strong>Surname, Initial. (Year) Title [Medium]</strong></p>
-            <p>Examples:</p>
-            <ul>
-              <li>Kusama, Y. (2016) Infinity Mirrors [Installation]</li>
-              <li>Sherman, C. (1981) Untitled #96 [Photograph]</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="technique-card">
-          <div class="technique-header">Quote References</div>
-          <div class="technique-content">
-            <p>Format: <strong>"Quote" (Surname, Year, p.X)</strong></p>
-            <p>Example:</p>
-            <ul>
-              <li>"My art originates from hallucinations." (Kusama, 2002, p.23)</li>
-            </ul>
-            <p>For online sources without pages, omit page number.</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Example Analysis -->
-      <h2>Example <span class="techniques-label">Reference</span></h2>
-      
-      <div class="example-section">
-        <h3 class="example-title">Student Example</h3>
-        
-        <div class="example-image-container">
-          <img src="student_example.jpg" alt="Student research page example" class="example-image" onclick="openModal(this.src)">
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
-          <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-            <h4 style="color: var(--techniques); margin-top: 0; font-size: 1.2rem;">Good Elements:</h4>
-            <ul>
-              <li>Clear enlarged details</li>
-              <li>Proper references</li>
-              <li>Good color connections</li>
-              <li>Balanced layout</li>
-              <li>Effective noise filters</li>
-            </ul>
-          </div>
-          
-          <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-            <h4 style="color: var(--techniques); margin-top: 0; font-size: 1.2rem;">Technical Notes:</h4>
-            <ul>
-              <li>Details focus on texture/pattern</li>
-              <li>Colors create visual unity</li>
-              <li>Noise enhances textures</li>
-              <li>Text doesn't overwhelm images</li>
-              <li>Citations are complete</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Layout and Design Tips -->
-      <h2>Design Tips <span class="techniques-label">Tips</span></h2>
-      
-      <div class="activity-grid">
-        <div class="activity-box">
-          <h4>Visual Hierarchy</h4>
-          <ul>
-            <li>Make important elements larger</li>
-            <li>Use space effectively</li>
-            <li>Guide viewer's eye</li>
-          </ul>
-        </div>
-        
-        <div class="activity-box">
-          <h4>Detail Selection</h4>
-          <ul>
-            <li>Choose meaningful details</li>
-            <li>Highlight hidden elements</li>
-            <li>Show textures and patterns</li>
-          </ul>
-        </div>
-        
-        <div class="activity-box">
-          <h4>Visual Connections</h4>
-          <ul>
-            <li>Use color to link elements</li>
-            <li>Create visual relationships</li>
-            <li>Keep consistent treatment</li>
-          </ul>
-        </div>
-      </div>
-      
-      <!-- Submission guidelines -->
-      <h2>Submit <span class="techniques-label">Upload</span></h2>
+    </div>
 
-      <div style="background: var(--techniques-light); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 30px 0; border: 3px dashed var(--techniques);">
-        <h3 style="color: var(--techniques); text-align: center; margin-top: 0; margin-bottom: 15px;">Upload to Padlet</h3>
-  
-        <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px;">
-          <p style="margin-bottom: 5px;">Submit your research page with digital techniques.</p>
-          <p style="margin-bottom: 0;">Name: <strong>FULL_NAME_task2.jpg</strong></p>
-        </div>
-  
-        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 25px;">
-          <h4 style="color: var(--techniques); margin-top: 0; font-size: 1.2rem; margin-bottom: 15px;">How to Submit:</h4>
-          <ol>
-            <li>Go to Padlet</li>
-            <li>Click the "+" button</li>
-            <li>Add your Full name as title</li>
-            <li>Upload your research page</li>
-            <li>Click "Publish"</li>
-          </ol>
-        </div>
-  
-        <div style="text-align: center; margin: 30px auto;">
-          <a href="https:https://padlet.com/artslondon/week-6-noise-filters-colour-effects-and-enlarging-details-nouw07zqdt1iawdx" target="_blank" style="display: inline-block; padding: 15px 30px; background-color: var(--techniques); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: all 0.3s ease; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(10, 128, 128, 0.3);">
-            Go to Padlet
-          </a>
-        </div>
-      </div>
-
-      <div class="nav-buttons">
-        <button class="nav-btn prev-btn" onclick="goToSection('task')">Previous: Task 1</button>
-        <button class="nav-btn next-btn" onclick="goToSection('documentation')">Next: Task 3</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- DOCUMENTATION SECTION -->
-  <div id="documentation" class="content-section">
-    <div class="section-banner task-banner" style="background-color: var(--documentation-light); border-color: var(--documentation); color: var(--documentation);">
-      TASK 3: DOCUMENT YOUR PROGRESS
-    </div>
-    
-    <div class="task-section">
-      <iframe src="https://hsstokes.github.io/Progress_Documentation/" width="100%" height="800px" frameborder="0"></iframe>
-      
-      <div class="nav-buttons">
-        <button class="nav-btn prev-btn" onclick="goToSection('techniques')">Previous: Task 2</button>
-        <button class="nav-btn next-btn" onclick="goToSection('quiz')">Next: Knowledge Check</button>
-      </div>
-    </div>
-  </div>
-     
-  <!-- QUIZ SECTION -->
-  <div id="quiz" class="content-section">
-    <div class="section-banner quiz-banner">
-      KNOWLEDGE CHECK: Quick Quiz
-    </div>
-    
-    <div class="quiz-container">
-      <div class="quiz-header">
-        <h3>Digital Techniques Quiz</h3>
-      </div>
-      
-      <div class="quiz-content">
-        <div class="quiz-question">1. Which tool helps you select details to enlarge?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="selectOption(this)">Text Tool</div>
-          <div class="quiz-option" onclick="selectOption(this)">Marquee Tool</div>
-          <div class="quiz-option" onclick="selectOption(this)">Brush Tool</div>
-          <div class="quiz-option" onclick="selectOption(this)">Eraser Tool</div>
-        </div>
-        <div class="quiz-feedback"></div>
-        
-        <div class="quiz-question">2. What is the correct format for Harvard referencing?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="selectOption(this)">Creator's Surname, Initial. (Year) Title of Work [Medium]</div>
-          <div class="quiz-option" onclick="selectOption(this)">Title of Work by Creator (Year) [Medium]</div>
-          <div class="quiz-option" onclick="selectOption(this)">Creator (Year): "Title of Work" [Medium]</div>
-          <div class="quiz-option" onclick="selectOption(this)">Work Title - Creator's Name, Year, Medium</div>
-        </div>
-        <div class="quiz-feedback"></div>
-        
-        <div class="quiz-question">3. Which setting should you check when applying noise filter?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="selectOption(this)">Monochromatic</div>
-          <div class="quiz-option" onclick="selectOption(this)">Gaussian</div>
-          <div class="quiz-option" onclick="selectOption(this)">Uniform</div>
-          <div class="quiz-option" onclick="selectOption(this)">Transparent</div>
-        </div>
-        <div class="quiz-feedback"></div>
-        
-        <div class="quiz-question">4. Which blending mode darkens images?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="selectOption(this)">Screen</div>
-          <div class="quiz-option" onclick="selectOption(this)">Multiply</div>
-          <div class="quiz-option" onclick="selectOption(this)">Normal</div>
-          <div class="quiz-option" onclick="selectOption(this)">Lighten</div>
-        </div>
-        <div class="quiz-feedback"></div>
-        
-        <div class="quiz-question">5. Why do we enlarge details in research pages?</div>
-        <div class="quiz-options">
-          <div class="quiz-option" onclick="selectOption(this)">To fill empty space</div>
-          <div class="quiz-option" onclick="selectOption(this)">To highlight important elements</div>
-          <div class="quiz-option" onclick="selectOption(this)">To make pages more complex</div>
-          <div class="quiz-option" onclick="selectOption(this)">To avoid using whole images</div>
-        </div>
-        <div class="quiz-feedback"></div>
-      </div>
-    </div>
-    
-    <!-- Self-Reflection -->
-    <div class="prep-box" style="border-color: var(--quiz); background-color: var(--quiz-light);">
-      <h3 style="color: var(--quiz);">Reflection Questions</h3>
-      
-      <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-        <p>Think about what you've learned:</p>
-        <ol>
-          <li><strong>Which technique was most useful?</strong></li>
-          <li><strong>How did enlarging details help you understand the artwork?</strong></li>
-          <li><strong>What challenges did you face?</strong></li>
-          <li><strong>How will you use these skills in future work?</strong></li>
-        </ol>
-        <p style="font-style: italic; margin-top: 15px;">Write your thoughts in a journal.</p>
-      </div>
-    </div>
-    
     <div class="nav-buttons">
-      <button class="nav-btn prev-btn" onclick="goToSection('documentation')">Previous: Task 3</button>
-      <button class="nav-btn next-btn" onclick="goToSection('overview')">Back to Overview</button>
+      <button class="prev-btn" disabled>← Previous</button>
+      <button class="next-btn" data-go="task1">Next: Task 1 →</button>
     </div>
-  </div>
+  </section>
 
-  <!-- Modal for image viewing -->
-  <div id="imageModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="modalImage">
-  </div>
+  <!-- ===================== TASK 1 ===================== -->
+  <section class="content-section" id="task1" style="--c: var(--pink); --cl: var(--pink-light)">
+    <div class="section-banner">🔍 TASK 1 — DIGITAL TECHNIQUES</div>
+    <p class="intro">Watch the video first. Then open each step. Practise on one artwork.</p>
+
+    <div class="accordion">
+      <div class="acc open">
+        <button class="acc-head" type="button"><span class="acc-num">▶</span><span class="acc-title">Watch: Enlarging details and enhancing images</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <div class="video">
+            <iframe src="https://ual.cloud.panopto.eu/Panopto/Pages/Embed.aspx?id=2a3b5c8c-30ff-4bd7-ada8-b27b00980c43" title="Digital Techniques Tutorial" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">1</span><span class="acc-title">Enlarge details</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <ol>
+            <li>Choose a selection tool: Marquee <span class="key">M</span> or Lasso <span class="key">L</span>.</li>
+            <li>Select a small detail.</li>
+            <li>Copy <span class="key">⌘/Ctrl</span>+<span class="key">C</span>. Paste <span class="key">⌘/Ctrl</span>+<span class="key">V</span>. It goes on a new layer.</li>
+            <li>Make the detail bigger: Free Transform <span class="key">⌘/Ctrl</span>+<span class="key">T</span>.</li>
+          </ol>
+          <div class="thumb" data-src="technique_enlarging.jpg">
+            <img src="technique_enlarging.jpg" alt="Enlarging details technique">
+            <div class="missing-note">Image not found:<br>technique_enlarging.jpg</div>
+            <span class="enlarge">🔍 Enlarge</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">2</span><span class="acc-title">Add a noise filter</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <ol>
+            <li>Go to <span class="menu">Filter › Noise › Add Noise</span>.</li>
+            <li>Try an amount of 5–15%.</li>
+            <li>Tick <strong>Monochromatic</strong>.</li>
+          </ol>
+          <div class="thumb" data-src="technique_noise.jpg">
+            <img src="technique_noise.jpg" alt="Noise filter application">
+            <div class="missing-note">Image not found:<br>technique_noise.jpg</div>
+            <span class="enlarge">🔍 Enlarge</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">3</span><span class="acc-title">Add colour effects</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <ol>
+            <li>Make a new colour layer.</li>
+            <li>Try a blending mode: <strong>Multiply</strong> or <strong>Overlay</strong>.</li>
+            <li>Set opacity to 30–70%.</li>
+            <li>Use colour to connect parts of your page.</li>
+          </ol>
+          <div class="thumb" data-src="technique_color.jpg">
+            <img src="technique_color.jpg" alt="Colour effects example">
+            <div class="missing-note">Image not found:<br>technique_color.jpg</div>
+            <span class="enlarge">🔍 Enlarge</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Practice</h2>
+    <p class="intro">Do these three things.</p>
+    <div class="card-grid">
+      <div class="card" style="--cc: var(--pink)">
+        <div class="label">1 · Choose image</div>
+        <ul>
+          <li>Pick an artwork</li>
+          <li>Find 2–3 important details</li>
+        </ul>
+      </div>
+      <div class="card" style="--cc: var(--pink)">
+        <div class="label">2 · Apply techniques</div>
+        <ul>
+          <li>Enlarge your details</li>
+          <li>Add a noise filter</li>
+          <li>Try colour effects</li>
+        </ul>
+      </div>
+      <div class="card" style="--cc: var(--pink)">
+        <div class="label">3 · Save examples</div>
+        <ul>
+          <li>Save before / after images</li>
+          <li>Write down your best settings</li>
+          <li>Save as <span class="file-name">FULL_NAME_task1.jpg</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Examples</h2>
+    <div class="dark-panel">
+      <div class="panel-label">Technique examples · click to enlarge</div>
+      <div class="example-grid">
+        <div>
+          <div class="thumb" data-src="example_enlarging.jpg">
+            <img src="example_enlarging.jpg" alt="Detail enlargement example">
+            <div class="missing-note">Image not found:<br>example_enlarging.jpg</div>
+            <span class="enlarge">🔍 Enlarge</span>
+          </div>
+          <div class="caption"><strong>Enlarged Details</strong>Effective selection and enlargement of textile details</div>
+        </div>
+        <div>
+          <div class="thumb" data-src="example_noise.jpg">
+            <img src="example_noise.jpg" alt="Noise filter example">
+            <div class="missing-note">Image not found:<br>example_noise.jpg</div>
+            <span class="enlarge">🔍 Enlarge</span>
+          </div>
+          <div class="caption"><strong>Noise Filter</strong>Noise filter adds texture and depth</div>
+        </div>
+        <div>
+          <div class="thumb" data-src="example_color.jpg">
+            <img src="example_color.jpg" alt="Colour effects example">
+            <div class="missing-note">Image not found:<br>example_color.jpg</div>
+            <span class="enlarge">🔍 Enlarge</span>
+          </div>
+          <div class="caption"><strong>Colour Effects</strong>Colour overlays create visual connections</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="checklist" data-key="edrp-task1">
+      <h3>✅ Task 1 Checklist</h3>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I watched the video</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I enlarged 2–3 details</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I added a noise filter</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I tried colour effects</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I saved as FULL_NAME_task1.jpg</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">Screenshot taken</span></button>
+      <div class="check-count"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="prev-btn" data-go="overview">← Overview</button>
+      <button class="next-btn" data-go="task2">Next: Task 2 →</button>
+    </div>
+  </section>
+
+  <!-- ===================== TASK 2 ===================== -->
+  <section class="content-section" id="task2" style="--c: var(--teal); --cl: var(--teal-light)">
+    <div class="section-banner">🖼️ TASK 2 — RESEARCH PAGE</div>
+    <p class="intro">Make a research page about one artist. Use your Task 1 skills.</p>
+
+    <div class="accordion">
+      <div class="acc open">
+        <button class="acc-head" type="button"><span class="acc-num">1</span><span class="acc-title">Choose an artist</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <ul>
+            <li>Choose an artist related to your theme.</li>
+            <li>Find good quality images of their work.</li>
+            <li>Collect quotes or information about their work.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">2</span><span class="acc-title">Select details</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <ul>
+            <li>Find important details to show.</li>
+            <li>Choose details that show technique or idea.</li>
+          </ul>
+          <div class="thumb" data-src="detail_selection.jpg">
+            <img src="detail_selection.jpg" alt="Selecting important details">
+            <div class="missing-note">Image not found:<br>detail_selection.jpg</div>
+            <span class="enlarge">🔍 Enlarge</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">3</span><span class="acc-title">Apply techniques</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <ul>
+            <li>Use your skills from Task 1.</li>
+            <li>Enlarge your chosen details.</li>
+            <li>Add noise filters for texture.</li>
+            <li>Use colour to link elements.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">4</span><span class="acc-title">Add references and finish the layout</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <ul>
+            <li>Use Harvard referencing.</li>
+            <li>Format: <strong>Surname, Initial. (Year) Title [Medium]</strong></li>
+            <li>Make a balanced layout.</li>
+            <li>Make your text easy to read.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Referencing Guide</h2>
+    <div class="why-box"><strong>Why reference?</strong> It shows academic integrity. It gives credit to artists. It shows professional standards.</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="label">Image references</div>
+        <div class="format">Surname, Initial. (Year) Title [Medium]</div>
+        <ul>
+          <li>Kusama, Y. (2016) Infinity Mirrors [Installation]</li>
+          <li>Sherman, C. (1981) Untitled #96 [Photograph]</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="label">Quote references</div>
+        <div class="format">"Quote" (Surname, Year, p.X)</div>
+        <ul>
+          <li>"My art originates from hallucinations." (Kusama, 2002, p.23)</li>
+          <li>Online source with no pages? Leave out the page number.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Student Example</h2>
+    <div class="dark-panel">
+      <div class="panel-label">Student research page · click to enlarge</div>
+      <div class="thumb" data-src="student_example.jpg">
+        <img src="student_example.jpg" alt="Student research page example">
+        <div class="missing-note">Image not found:<br>student_example.jpg</div>
+        <span class="enlarge">🔍 Enlarge</span>
+      </div>
+      <div class="notes-grid">
+        <div class="note-box">
+          <h4>Good elements</h4>
+          <ul>
+            <li>Clear enlarged details</li>
+            <li>Correct references</li>
+            <li>Good colour connections</li>
+            <li>Balanced layout</li>
+            <li>Effective noise filters</li>
+          </ul>
+        </div>
+        <div class="note-box">
+          <h4>Technical notes</h4>
+          <ul>
+            <li>Details focus on texture / pattern</li>
+            <li>Colours create visual unity</li>
+            <li>Noise improves textures</li>
+            <li>Text does not overwhelm images</li>
+            <li>References are complete</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Design Tips</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="label">Visual hierarchy</div>
+        <ul>
+          <li>Make important things larger</li>
+          <li>Use space well</li>
+          <li>Guide the viewer's eye</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="label">Detail selection</div>
+        <ul>
+          <li>Choose meaningful details</li>
+          <li>Show hidden elements</li>
+          <li>Show textures and patterns</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="label">Visual connections</div>
+        <ul>
+          <li>Use colour to link elements</li>
+          <li>Create visual relationships</li>
+          <li>Treat images the same way</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="checklist" data-key="edrp-task2">
+      <h3>✅ Task 2 Checklist</h3>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I chose an artist for my theme</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I selected and enlarged details</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I used noise and colour effects</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I added Harvard references</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I saved as FULL_NAME_task2.jpg</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">Screenshot taken</span></button>
+      <div class="check-count"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="prev-btn" data-go="task1">← Task 1</button>
+      <button class="next-btn" data-go="report">Next: Progress Report →</button>
+    </div>
+  </section>
+
+  <!-- ===================== PROGRESS REPORT ===================== -->
+  <section class="content-section" id="report" style="--c: var(--blue); --cl: var(--blue-light)">
+    <div class="section-banner">📝 PROGRESS REPORT — DOCUMENT &amp; REFLECT</div>
+    <div class="why-box"><strong>Why?</strong> Your report shows <em>how</em> you learned, not only what you made. Reflection is assessed at Level 5.</div>
+
+    <div class="accordion">
+      <div class="acc open">
+        <button class="acc-head" type="button"><span class="acc-num">1</span><span class="acc-title">Open the tool</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <p>Open the Progress Documentation tool in a new tab.</p>
+          <a class="btn" href="https://hsstokes.github.io/Progress_Documentation/" target="_blank" rel="noopener">Open Progress Documentation ↗</a>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">2</span><span class="acc-title">Add your name and 2–3 screenshots</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <p>Write your name. Add 2–3 screenshots. Write a short caption for each one.</p>
+          <ul>
+            <li>Your enlarged details (Task 1)</li>
+            <li>The Add Noise window or your Layers panel with a blending mode</li>
+            <li>Your research page layout (Task 2)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">3</span><span class="acc-title">Answer 4 questions</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <div class="reflect-grid">
+            <div class="reflect"><div class="label">Techniques</div>Which technique was most useful?</div>
+            <div class="reflect"><div class="label">Challenges</div>What challenges did you face?</div>
+            <div class="reflect"><div class="label">What worked</div>How did enlarging details help you understand the artwork?</div>
+            <div class="reflect"><div class="label">Next time</div>How will you use these skills in future work?</div>
+          </div>
+          <div class="tip-box">
+            <strong>💡 Useful phrases</strong>
+            <ul>
+              <li>I used … to …</li>
+              <li>This worked because …</li>
+              <li>This was difficult because …</li>
+              <li>Next time, I will …</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <button class="acc-head" type="button"><span class="acc-num">4</span><span class="acc-title">Download your PDF</span><span class="acc-arrow">›</span></button>
+        <div class="acc-body">
+          <p>Download your report as a PDF. You will upload it in Submit.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="checklist" data-key="edrp-report">
+      <h3>✅ Progress Report Checklist</h3>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I opened the tool</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I added my name and 2–3 screenshots with captions</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I answered the 4 questions</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I downloaded the PDF</span></button>
+      <div class="check-count"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="prev-btn" data-go="task2">← Task 2</button>
+      <button class="next-btn" data-go="submit">Next: Submit →</button>
+    </div>
+  </section>
+
+  <!-- ===================== SUBMIT ===================== -->
+  <section class="content-section" id="submit" style="--c: var(--gold); --cl: var(--gold-light)">
+    <div class="section-banner">📤 SUBMIT — UPLOAD TO PADLET</div>
+    <p class="intro">Upload three things to Padlet.</p>
+
+    <div class="card-grid">
+      <div class="card" style="--cc: var(--pink)">
+        <div class="label">1 · Task 1</div>
+        <p>One example of your digital techniques.</p>
+        <p><span class="file-name">FULL_NAME_task1.jpg</span></p>
+      </div>
+      <div class="card" style="--cc: var(--teal)">
+        <div class="label">2 · Task 2</div>
+        <p>Your research page with digital techniques.</p>
+        <p><span class="file-name">FULL_NAME_task2.jpg</span></p>
+      </div>
+      <div class="card" style="--cc: var(--blue)">
+        <div class="label">3 · Progress Report</div>
+        <p>Your Progress Report PDF.</p>
+      </div>
+    </div>
+
+    <div class="padlet-box">
+      <div class="card" style="text-align: left; --cc: var(--gold); box-shadow: none;">
+        <div class="label">How to submit</div>
+        <ul>
+          <li>Go to Padlet</li>
+          <li>Click the <strong>+</strong> button</li>
+          <li>Add your full name as the title</li>
+          <li>Upload your file</li>
+          <li>Click <strong>Publish</strong></li>
+        </ul>
+      </div>
+      <a class="btn" href="https://artslondon.padlet.org/hstokes12/week-6-noise-filters-colour-effects-and-enlarging-details-nouw07zqdt1iawdx" target="_blank" rel="noopener">Go to Padlet ↗</a>
+    </div>
+
+    <div class="checklist" data-key="edrp-submit">
+      <h3>✅ Submit Checklist</h3>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">FULL_NAME_task1.jpg uploaded</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">FULL_NAME_task2.jpg uploaded</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">Progress Report PDF uploaded</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">My full name is the title on each post</span></button>
+      <div class="check-count"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="prev-btn" data-go="report">← Progress Report</button>
+      <button class="next-btn" data-go="quiz">Next: Quick Quiz →</button>
+    </div>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section class="content-section" id="quiz" style="--c: var(--purple); --cl: var(--purple-light)">
+    <div class="section-banner">❓ KNOWLEDGE CHECK — QUICK QUIZ</div>
+    <p class="intro">Choose one answer. Wrong? Try again.</p>
+
+    <div id="quizBox">
+      <div class="q" data-correct="1">
+        <div class="q-text"><span>1.</span>Which tool helps you select details to enlarge?</div>
+        <div class="options">
+          <button class="opt" type="button">Text Tool</button>
+          <button class="opt" type="button">Marquee Tool</button>
+          <button class="opt" type="button">Brush Tool</button>
+          <button class="opt" type="button">Eraser Tool</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q" data-correct="0">
+        <div class="q-text"><span>2.</span>What is the correct format for Harvard referencing?</div>
+        <div class="options">
+          <button class="opt" type="button">Creator's Surname, Initial. (Year) Title of Work [Medium]</button>
+          <button class="opt" type="button">Title of Work by Creator (Year) [Medium]</button>
+          <button class="opt" type="button">Creator (Year): "Title of Work" [Medium]</button>
+          <button class="opt" type="button">Work Title - Creator's Name, Year, Medium</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q" data-correct="0">
+        <div class="q-text"><span>3.</span>Which setting should you tick when you add a noise filter?</div>
+        <div class="options">
+          <button class="opt" type="button">Monochromatic</button>
+          <button class="opt" type="button">Gaussian</button>
+          <button class="opt" type="button">Uniform</button>
+          <button class="opt" type="button">Transparent</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q" data-correct="1">
+        <div class="q-text"><span>4.</span>Which blending mode darkens images?</div>
+        <div class="options">
+          <button class="opt" type="button">Screen</button>
+          <button class="opt" type="button">Multiply</button>
+          <button class="opt" type="button">Normal</button>
+          <button class="opt" type="button">Lighten</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q" data-correct="1">
+        <div class="q-text"><span>5.</span>Why do we enlarge details in research pages?</div>
+        <div class="options">
+          <button class="opt" type="button">To fill empty space</button>
+          <button class="opt" type="button">To highlight important elements</button>
+          <button class="opt" type="button">To make pages more complex</button>
+          <button class="opt" type="button">To avoid using whole images</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </div>
+
+    <div class="score" id="score">0 / 5 correct</div>
+
+    <div class="nav-buttons">
+      <button class="prev-btn" data-go="submit">← Submit</button>
+      <button class="next-btn" data-go="overview">Back to Overview ↺</button>
+    </div>
+  </section>
+
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <img id="lightboxImg" alt="">
 </div>
 
 <script>
-// Image Modal Functionality
-function openModal(src) {
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImage');
-  modal.style.display = "block";
-  modalImg.src = src;
-}
+// ---- Sections, tabs and progress bar ----
+var sections = ['overview', 'task1', 'task2', 'report', 'submit', 'quiz'];
 
-// Section Navigation
-const sections = ['overview', 'task', 'techniques', 'documentation', 'quiz'];
-let currentSection = 'overview';
-
-function goToSection(sectionId) {
-  if (!sectionId) return;
-  
-  // Hide all sections
-  document.querySelectorAll('.content-section').forEach(section => {
-    section.classList.remove('active');
+function goToSection(id) {
+  document.querySelectorAll('.content-section').forEach(function (s) {
+    s.classList.toggle('active', s.id === id);
   });
-  
-  // Show the selected section
-  document.getElementById(sectionId).classList.add('active');
-  
-  // Update active navigation block
-  document.querySelectorAll('.nav-block').forEach(block => {
-    block.classList.remove('active-block');
-    if (block.dataset.section === sectionId) {
-      block.classList.add('active-block');
-    }
+  document.querySelectorAll('.nav-block').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.section === id);
   });
-  
-  // Update current section
-  currentSection = sectionId;
-  
-  // Update progress bar
-  updateProgressBar();
-  
-  // Scroll to top
+  var index = sections.indexOf(id);
+  document.getElementById('progressFill').style.width = ((index + 1) / sections.length * 100) + '%';
   window.scrollTo(0, 0);
 }
 
-function updateProgressBar() {
-  const progressBar = document.getElementById('progressBar');
-  const index = sections.indexOf(currentSection);
-  const percentage = ((index + 1) / sections.length) * 100;
-  progressBar.style.width = `${percentage}%`;
-}
-
-// Quiz functionality
-function selectOption(element) {
-  // Clear any previously selected options in this question group
-  const questionGroup = element.parentElement;
-  questionGroup.querySelectorAll('.quiz-option').forEach(opt => {
-    opt.classList.remove('selected');
-  });
-  
-  // Mark this option as selected
-  element.classList.add('selected');
-  
-  // Check the answer
-  const question = questionGroup.previousElementSibling.textContent;
-  const answer = element.textContent;
-  const feedback = questionGroup.nextElementSibling;
-  
-  // Define correct answers for each question
-  const correctAnswers = {
-    "1. Which tool helps you select details to enlarge?": "Marquee Tool",
-    "2. What is the correct format for Harvard referencing?": "Creator's Surname, Initial. (Year) Title of Work [Medium]",
-    "3. Which setting should you check when applying noise filter?": "Monochromatic",
-    "4. Which blending mode darkens images?": "Multiply",
-    "5. Why do we enlarge details in research pages?": "To highlight important elements"
-  };
-  
-  // Check if answer is correct
-  if (answer === correctAnswers[question]) {
-    feedback.textContent = "Correct! Well done.";
-    feedback.className = "quiz-feedback correct";
-  } else {
-    feedback.textContent = "Incorrect. Try again.";
-    feedback.className = "quiz-feedback incorrect";
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const modal = document.getElementById('imageModal');
-  const closeBtn = document.getElementsByClassName('close')[0];
-  
-  // Close modal when clicking the × symbol
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      modal.style.display = "none";
-    });
-  }
-  
-  // Close modal when clicking outside the image
-  window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-  
-  // Set up navigation blocks
-  document.querySelectorAll('.nav-block').forEach(block => {
-    block.addEventListener('click', () => {
-      goToSection(block.dataset.section);
-    });
-  });
-  
-  // Initialize progress bar and active section
-  document.querySelector('.nav-block[data-section="overview"]').classList.add('active-block');
-  updateProgressBar();
+document.querySelectorAll('.nav-block').forEach(function (b) {
+  b.addEventListener('click', function () { goToSection(b.dataset.section); });
 });
-</script>
+document.querySelectorAll('[data-go]').forEach(function (b) {
+  b.addEventListener('click', function () { goToSection(b.dataset.go); });
+});
 
+// ---- Accordions ----
+document.querySelectorAll('.acc-head').forEach(function (head) {
+  head.addEventListener('click', function () {
+    head.parentElement.classList.toggle('open');
+  });
+});
+
+// ---- Missing images ----
+document.querySelectorAll('.thumb img').forEach(function (img) {
+  function markMissing() { img.closest('.thumb').classList.add('missing'); }
+  if (img.complete && img.naturalWidth === 0) markMissing();
+  img.addEventListener('error', markMissing);
+});
+
+// ---- Lightbox ----
+var lightbox = document.getElementById('lightbox');
+var lightboxImg = document.getElementById('lightboxImg');
+document.querySelectorAll('.thumb').forEach(function (thumb) {
+  thumb.addEventListener('click', function () {
+    if (thumb.classList.contains('missing')) return;
+    lightboxImg.src = thumb.dataset.src;
+    lightboxImg.alt = thumb.querySelector('img').alt;
+    lightbox.classList.add('open');
+  });
+});
+function closeLightbox() { lightbox.classList.remove('open'); }
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+
+// ---- Checklists (saved in this browser) ----
+document.querySelectorAll('.checklist').forEach(function (list) {
+  var key = list.dataset.key;
+  var items = list.querySelectorAll('.check-item');
+  var countEl = list.querySelector('.check-count');
+
+  function update() {
+    var done = list.querySelectorAll('.check-item.done').length;
+    countEl.textContent = done + ' / ' + items.length + ' done';
+  }
+  try {
+    var saved = JSON.parse(localStorage.getItem(key) || '[]');
+    items.forEach(function (item, i) { if (saved[i]) item.classList.add('done'); });
+  } catch (e) {}
+
+  items.forEach(function (item) {
+    item.addEventListener('click', function () {
+      item.classList.toggle('done');
+      var states = Array.prototype.map.call(items, function (i) { return i.classList.contains('done'); });
+      try { localStorage.setItem(key, JSON.stringify(states)); } catch (e) {}
+      update();
+    });
+  });
+  update();
+});
+
+// ---- Quiz ----
+var questions = document.querySelectorAll('.q');
+function updateScore() {
+  var right = document.querySelectorAll('.q.correct').length;
+  document.getElementById('score').textContent = right + ' / ' + questions.length + ' correct';
+}
+questions.forEach(function (q) {
+  var correct = Number(q.dataset.correct);
+  var opts = q.querySelectorAll('.opt');
+  var fb = q.querySelector('.feedback');
+  opts.forEach(function (opt, i) {
+    opt.addEventListener('click', function () {
+      if (q.classList.contains('correct')) return;
+      opts.forEach(function (o) { o.classList.remove('wrong'); });
+      if (i === correct) {
+        opt.classList.add('right');
+        q.classList.add('correct');
+        fb.textContent = '✓ Correct! Well done.';
+        fb.className = 'feedback right';
+      } else {
+        opt.classList.add('wrong');
+        fb.textContent = '✗ Not quite. Try again.';
+        fb.className = 'feedback wrong';
+      }
+      updateScore();
+    });
+  });
+});
+
+goToSection('overview');
+</script>
 </body>
 </html>

@@ -561,6 +561,17 @@ h2::before {
   cursor: pointer;
   line-height: 1;
 }
+
+/* ---------- Stuck? troubleshooting (sweep Nov 2026) ---------- */
+.stuck { background: #fff; border: 2px solid var(--ink, #1a1a1a); margin: 20px 0; }
+.stuck .stuck-head { background: var(--ink, #1a1a1a); color: #fff; font-family: 'Space Mono', monospace; font-weight: 700; padding: 10px 16px; }
+.stuck .row { display: grid; grid-template-columns: 1fr 1.4fr; border-top: 1px dashed var(--warm-mid, #d4cfc8); }
+.stuck .row:first-of-type { border-top: 0; }
+.stuck .prob, .stuck .fix { padding: 10px 16px; font-size: 0.92rem; line-height: 1.6; }
+.stuck .prob { font-weight: 600; background: var(--paper, #f2ede8); }
+.stuck .prob::before { content: "✗ "; color: #c62828; }
+.stuck .fix::before { content: "→ "; color: var(--teal, #0a7a7a); font-weight: 700; }
+@media (max-width: 600px) { .stuck .row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -637,7 +648,7 @@ h2::before {
         <div class="label">Progress Report</div>
         <ul>
           <li>Record your process</li>
-          <li>Add screenshots</li>
+          <li>Add your exported JPEGs</li>
           <li>Share challenges and solutions</li>
           <li>Reflect on your learning</li>
         </ul>
@@ -811,6 +822,13 @@ h2::before {
       </div>
     </div>
 
+    <div class="stuck">
+      <div class="stuck-head">🆘 Stuck? Try this</div>
+      <div class="row"><div class="prob">My detail did not go on a new layer.</div><div class="fix">Copy <span class="key">⌘/Ctrl</span>+<span class="key">C</span>, then paste <span class="key">⌘/Ctrl</span>+<span class="key">V</span>. Check the Layers panel.</div></div>
+      <div class="row"><div class="prob">My enlarged detail looks blurry.</div><div class="fix">This is normal. Start with a bigger image. Noise helps hide it.</div></div>
+      <div class="row"><div class="prob">Add Noise is greyed out.</div><div class="fix">Click a picture layer, not a text layer. If still grey: right-click › <strong>Rasterize Layer</strong>.</div></div>
+    </div>
+
     <div class="checklist" data-key="edrp-task1">
       <h3>✅ Task 1 Checklist</h3>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I watched the video</span></button>
@@ -818,7 +836,7 @@ h2::before {
       <button class="check-item" type="button"><span class="box"></span><span class="text">I added a noise filter</span></button>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I tried colour effects</span></button>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I saved as FULL_NAME_task1.jpg</span></button>
-      <button class="check-item" type="button"><span class="box"></span><span class="text">Screenshot taken</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">Process JPEG exported</span></button>
       <div class="check-count"></div>
     </div>
 
@@ -966,6 +984,12 @@ h2::before {
       </div>
     </div>
 
+    <div class="stuck">
+      <div class="stuck-head">🆘 Stuck? Try this</div>
+      <div class="row"><div class="prob">My text is hard to read.</div><div class="fix">Put text on a plain area. Or add a box behind it.</div></div>
+      <div class="row"><div class="prob">I forgot to export a JPEG during the task.</div><div class="fix">Open <strong>Window › History</strong>. Click an earlier step. Export your JPEG. Click the last step to return. <em>Do not edit while on an earlier step.</em></div></div>
+    </div>
+
     <div class="checklist" data-key="edrp-task2">
       <h3>✅ Task 2 Checklist</h3>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I chose an artist for my theme</span></button>
@@ -973,7 +997,7 @@ h2::before {
       <button class="check-item" type="button"><span class="box"></span><span class="text">I used noise and colour effects</span></button>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I added Harvard references</span></button>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I saved as FULL_NAME_task2.jpg</span></button>
-      <button class="check-item" type="button"><span class="box"></span><span class="text">Screenshot taken</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">Process JPEG exported</span></button>
       <div class="check-count"></div>
     </div>
 
@@ -998,12 +1022,12 @@ h2::before {
       </div>
 
       <div class="acc">
-        <button class="acc-head" type="button"><span class="acc-num">2</span><span class="acc-title">Add your name and 2–3 screenshots</span><span class="acc-arrow">›</span></button>
+        <button class="acc-head" type="button"><span class="acc-num">2</span><span class="acc-title">Add your name and 2–3 JPEGs</span><span class="acc-arrow">›</span></button>
         <div class="acc-body">
-          <p>Write your name. Add 2–3 screenshots. Write a short caption for each one.</p>
+          <p>Write your name. Add 2–3 exported JPEGs. Write a short caption for each one. Export each one: <strong>File › Export › Export As…</strong> › Format: <strong>JPG</strong>.</p>
           <ul>
             <li>Your enlarged details (Task 1)</li>
-            <li>The Add Noise window or your Layers panel with a blending mode</li>
+            <li>A detail with noise and a blending mode</li>
             <li>Your research page layout (Task 2)</li>
           </ul>
         </div>
@@ -1041,7 +1065,7 @@ h2::before {
     <div class="checklist" data-key="edrp-report">
       <h3>✅ Progress Report Checklist</h3>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I opened the tool</span></button>
-      <button class="check-item" type="button"><span class="box"></span><span class="text">I added my name and 2–3 screenshots with captions</span></button>
+      <button class="check-item" type="button"><span class="box"></span><span class="text">I added my name and 2–3 JPEGs with captions</span></button>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I answered the 4 questions</span></button>
       <button class="check-item" type="button"><span class="box"></span><span class="text">I downloaded the PDF</span></button>
       <div class="check-count"></div>
